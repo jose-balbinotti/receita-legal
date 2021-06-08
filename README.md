@@ -1,1 +1,1 @@
-# receitas
+Um aplicativo para criar e consultar receitas, baseados numa ‘ despensa local ‘, essa despensa nos cadastramos produtos que temos disponíveis. No cadastro de receitas, as receitas cadastradas verificam a despensa na hora da visualização da receita e exibe para o usuário os ingredientes faltantes e outras informações pertinentes, conseguimos visualizar essa receita num recycler view com cardview onde é exibido a foto (galeria/câmera) da receita seguido do nome e descrição. O aplicativo possui cadastro,Login, persistência de usuário e sua despensa.
