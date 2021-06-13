@@ -1,2 +1,2 @@
-rootProject.name = "Receita Legal"
+rootProject.name = "receitalegal"
 include ':app'
