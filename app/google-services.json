@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "569609498194",
+    "project_id": "receita-legal",
+    "storage_bucket": "receita-legal.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:569609498194:android:73892b908ac950ab5cb98b",
+        "android_client_info": {
+          "package_name": "com.example.receitalegal"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "569609498194-r1ou4cb6vqvha7l99rrufijv7121qk9h.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDFI-xJRSe93eC0P278fqQHMbueOzDn9Ak"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "569609498194-r1ou4cb6vqvha7l99rrufijv7121qk9h.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
