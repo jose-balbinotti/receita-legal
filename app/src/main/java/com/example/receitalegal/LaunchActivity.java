@@ -9,9 +9,6 @@ import com.google.firebase.auth.FirebaseAuth;
 
 public class LaunchActivity extends AppCompatActivity {
 
-
-    FirebaseAuth fAuth;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -22,9 +19,7 @@ public class LaunchActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        fAuth = FirebaseAuth.getInstance();
-
-        if(fAuth.getCurrentUser() == null){
+        if(FirebaseAuth.getInstance().getCurrentUser() == null){
             startActivity(new Intent(getApplicationContext(), LoginActivity.class));
         }else {
             startActivity(new Intent(getApplicationContext(), MainActivity.class));

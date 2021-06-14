@@ -9,5 +9,6 @@
     <string name="login_confirm">Login</string>
     <string name="login_new">New Here ? Create Account</string>
     <string name="login_title">Login</string>
+    <string name="main_logout">Logout</string>
 
 </resources>
