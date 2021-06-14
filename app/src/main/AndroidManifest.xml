@@ -11,6 +11,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Receitalegal">
+        <activity android:name=".RecipeActivity"></activity>
         <activity
             android:name=".LaunchActivity"
             android:theme="@style/LaunchTheme">
