@@ -37,8 +37,9 @@ public class RegisterActivity extends AppCompatActivity {
         fAuth = FirebaseAuth.getInstance();
 
         if(fAuth.getCurrentUser() != null){
-            startActivity(new Intent(getApplicationContext(), LoginActivity.class));
-            Toast.makeText(RegisterActivity.this, "Já está logado !" , Toast.LENGTH_SHORT).show();
+            //fAuth.signOut();
+            startActivity(new Intent(getApplicationContext(), MainActivity.class));
+            //Toast.makeText(RegisterActivity.this, "Já está logado !" , Toast.LENGTH_SHORT).show();
             finish();
         }
 
