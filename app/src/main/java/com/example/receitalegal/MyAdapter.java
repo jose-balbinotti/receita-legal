@@ -44,6 +44,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
             Recipe recipe = recipeArrayList.get(position);
             holder.name.setText(recipe.name);
             holder.description.setText(recipe.description);
+
     }
 
     @Override
@@ -53,12 +54,14 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
 
     public static class MyViewHolder extends RecyclerView.ViewHolder{
 
-        TextView name,description;
+        TextView name,description,img;
 
         public MyViewHolder(@NonNull @NotNull View itemView) {
             super(itemView);
+//            img = itemView.findViewById(R.id.post_img);
             name = itemView.findViewById(R.id.post_title);
             description = itemView.findViewById(R.id.post_description);
+
         }
     }
 }

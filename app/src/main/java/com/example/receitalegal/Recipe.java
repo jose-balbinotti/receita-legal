@@ -1,9 +1,12 @@
 package com.example.receitalegal;
 
+import android.net.Uri;
+
 public class Recipe {
 
     String name;
     String description;
+//    Uri img;
     String img;
     String ingr1;
     String ingr2;
@@ -15,6 +18,7 @@ public class Recipe {
     public Recipe(String name, String description, String img, String ingr1, String ingr2, String ingr3) {
         this.name = name;
         this.description = description;
+//    this.img = Uri.parse(img);
         this.img = img;
         this.ingr1 = ingr1;
         this.ingr2 = ingr2;
