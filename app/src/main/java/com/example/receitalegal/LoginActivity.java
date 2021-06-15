@@ -47,17 +47,17 @@ public class LoginActivity extends AppCompatActivity {
                 String password = lPassword.getText().toString().trim();
 
                 if(email.isEmpty()){
-                    lEmail.setError("email required");
+                    lEmail.setError("Email required");
                     return;
                 }
 
                 if(password.isEmpty()){
-                    lPassword.setError("password required");
+                    lPassword.setError("Password required");
                     return;
                 }
 
                 if(password.length() < 5){
-                    lPassword.setError("password require 5 or more characters");
+                    lPassword.setError("Password require 5 or more characters");
                     return;
                 }
 
@@ -68,6 +68,7 @@ public class LoginActivity extends AppCompatActivity {
                     public void onComplete(@NonNull @NotNull Task<AuthResult> task) {
                         if(task.isSuccessful()){
                             Toast.makeText(LoginActivity.this, "Logged Successfully", Toast.LENGTH_SHORT).show();
+                            Controller controller = new Controller();
                             startActivity(new Intent(getApplicationContext(), MainActivity.class));
                         }else {
                             Toast.makeText(LoginActivity.this, "Error !" +task.getException().getMessage(), Toast.LENGTH_SHORT).show();

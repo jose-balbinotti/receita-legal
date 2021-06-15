@@ -20,7 +20,7 @@
             android:layout_marginRight="20dp">
 
             <TextView
-                android:id="@+id/txtdash"
+                android:id="@+id/txtNameUser"
                 android:text="@string/userdash"
                 android:textSize="24sp"
                 android:textColor="#000"
@@ -30,7 +30,7 @@
 
             <TextView
                 android:layout_marginTop="6dp"
-                android:layout_below="@+id/txtdash"
+                android:layout_below="@+id/txtNameUser"
                 android:text="@string/userrecipes"
                 android:textSize="14sp"
                 android:textColor="#000"

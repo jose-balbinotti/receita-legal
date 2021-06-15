@@ -10,10 +10,10 @@
     <string name="login_new">New Here ? Create Account</string>
     <string name="login_title">Login</string>
     <string name="main_logout">Logout</string>
-    <string name="userdash">mydashboard</string>
+    <string name="userdash">[NameUser]</string>
     <string name="userrecipe">Recipes</string>
     <string name="userrecipes">30 recipes</string>
-    <string name="logout">logout</string>
+    <string name="logout">Logout</string>
     <string name="btnRecipes">Recipes</string>
     <string name="pantry">Pantry</string>
     <string name="descRecipe">TODO</string>

@@ -91,8 +91,8 @@ public class RegisterActivity extends AppCompatActivity {
                             //creating collection users
                             DocumentReference documentReference = fFirestore.collection("users").document(uId);
                             Map<String,Object> user = new HashMap<>();
-                            user.put("rName",name);
-                            user.put("rEmail",email);
+                            user.put("name",name);
+                            user.put("email",email);
                             //insert into database
                             documentReference.set(user).addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override
