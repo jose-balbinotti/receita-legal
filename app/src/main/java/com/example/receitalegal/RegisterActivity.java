@@ -48,69 +48,53 @@ public class RegisterActivity extends AppCompatActivity {
         fFirestore = FirebaseFirestore.getInstance();
 
         if(fAuth.getCurrentUser() != null){
-            //fAuth.signOut();
             startActivity(new Intent(getApplicationContext(), MainActivity.class));
-            //Toast.makeText(RegisterActivity.this, "Já está logado !" , Toast.LENGTH_SHORT).show();
             finish();
         }
 
-        // set listener to btn and validate data
 
-        rBtnRegister.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String email = rEmail.getText().toString().trim();
-                String password = rPassword.getText().toString().trim();
-                String name = rName.getText().toString().trim();
+        rBtnRegister.setOnClickListener(view -> {
+            String email = rEmail.getText().toString().trim();
+            String password = rPassword.getText().toString().trim();
+            String name = rName.getText().toString().trim();
 
-                if(email.isEmpty()){
-                    rEmail.setError("email required");
-                    return;
-                }
-
-                if(password.isEmpty()){
-                    rPassword.setError("password required");
-                    return;
-                }
-
-                if(password.length() < 5){
-                    rPassword.setError("password require 5 or more characters");
-                    return;
-                }
-
-                // register into firebase
-
-                fAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull @org.jetbrains.annotations.NotNull Task<AuthResult> task) {
-                        if(task.isSuccessful()){
-                            Toast.makeText(RegisterActivity.this, "User created", Toast.LENGTH_SHORT).show();
-
-                            //get user ID
-                            uId = fAuth.getCurrentUser().getUid();
-                            //creating collection users
-                            DocumentReference documentReference = fFirestore.collection("users").document(uId);
-                            Map<String,Object> user = new HashMap<>();
-                            user.put("rName",name);
-                            user.put("rEmail",email);
-                            //insert into database
-                            documentReference.set(user).addOnSuccessListener(new OnSuccessListener<Void>() {
-                                @Override
-                                public void onSuccess(Void aVoid) {
-                                  Log.d(TAG,"onSucess: USER PROFILE IS CREATED FOR "+ uId);
-                                }
-                            });
-
-                            startActivity(new Intent(getApplicationContext(), MainActivity.class));
-                        }else {
-                            Toast.makeText(RegisterActivity.this, "Error !" +task.getException().getMessage(), Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
-
-
-
+            if(email.isEmpty()){
+                rEmail.setError("email required");
+                return;
             }
+
+            if(password.isEmpty()){
+                rPassword.setError("password required");
+                return;
+            }
+
+            if(password.length() < 5){
+                rPassword.setError("password require 5 or more characters");
+                return;
+            }
+
+            fAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(task -> {
+                if(task.isSuccessful()){
+                    Toast.makeText(RegisterActivity.this, "User created", Toast.LENGTH_SHORT).show();
+
+                    //get user ID
+                    uId = fAuth.getCurrentUser().getUid();
+                    //creating collection users
+                    DocumentReference documentReference = fFirestore.collection("users").document(uId);
+                    Map<String,Object> user = new HashMap<>();
+                    user.put("name",name);
+                    user.put("email",email);
+                    //insert into database
+                    documentReference.set(user).addOnSuccessListener(aVoid -> Log.d(TAG,"onSucess: USER PROFILE IS CREATED FOR "+ uId));
+
+                    startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                }else {
+                    Toast.makeText(RegisterActivity.this, "Error !" +task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            });
+
+
+
         });
 
     }
