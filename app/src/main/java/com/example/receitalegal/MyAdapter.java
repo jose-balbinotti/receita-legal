@@ -1,9 +1,11 @@
 package com.example.receitalegal;
 
 import android.content.Context;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -44,6 +46,9 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
             Recipe recipe = recipeArrayList.get(position);
             holder.name.setText(recipe.name);
             holder.description.setText(recipe.description);
+//            Uri uri;
+//            uri = Uri.parse(recipe.img);
+//            holder.img.setImageURI(uri);
 
     }
 
@@ -54,7 +59,8 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
 
     public static class MyViewHolder extends RecyclerView.ViewHolder{
 
-        TextView name,description,img;
+        TextView name,description;
+        ImageView img;
 
         public MyViewHolder(@NonNull @NotNull View itemView) {
             super(itemView);

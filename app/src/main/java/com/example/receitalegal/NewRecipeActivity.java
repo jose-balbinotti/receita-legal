@@ -105,11 +105,26 @@ public class NewRecipeActivity extends AppCompatActivity {
             .addOnSuccessListener(documentReference -> {
                 Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
                 uploadImg();
+                getDownloadLink();
             })
             .addOnFailureListener(e -> Log.w(TAG, "Error adding document", e));
         });
 
 
+    }
+
+    public void getDownloadLink() {
+        storageReference.child("images/"+imgUri.getLastPathSegment()).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+            @Override
+            public void onSuccess(Uri uri) {
+                Toast.makeText(NewRecipeActivity.this, "URI: "+uri.toString(), Toast.LENGTH_SHORT).show();
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull @NotNull Exception e) {
+                Toast.makeText(NewRecipeActivity.this, "Deu erro", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     public void uploadImg(){
