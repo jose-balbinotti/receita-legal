@@ -51,8 +51,9 @@ public class NewRecipeActivity extends AppCompatActivity {
     EditText edIngredient2;
     EditText edIngredient3;
     Button btnSaveRecipe;
-    Bitmap compressor;
     UploadTask uploadTask;
+
+    String imgUrl;
 
     FirebaseAuth fAuth;
     FirebaseFirestore fFirestore;
@@ -82,42 +83,87 @@ public class NewRecipeActivity extends AppCompatActivity {
         storageReference = FirebaseStorage.getInstance().getReference();
 
 
+
+
         btnSaveRecipe.setOnClickListener(view -> {
-            String img = imgUri.toString();
-            //Uri mUri = Uri.parse(s); to decode
-            String name = edName.getText().toString().trim();
-            String description = edDesc.getText().toString().trim();
-            String ingr1 = edIngredient1.getText().toString().trim();
-            String ingr2 = edIngredient2.getText().toString().trim();
-            String ingr3 = edIngredient3.getText().toString().trim();
 
-            Map<String, Object> recipe = new HashMap<>();
-            recipe.put("img",img);
-            recipe.put("name", name);
-            recipe.put("description", description);
-            recipe.put("ingr1", ingr1);
-            recipe.put("ingr2", ingr2);
-            recipe.put("ingr3", ingr3);
-
-
-        fFirestore.collection("users").document(uId).collection("recipeBook")
-            .add(recipe)
-            .addOnSuccessListener(documentReference -> {
-                Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
                 uploadImg();
-                getDownloadLink();
-            })
-            .addOnFailureListener(e -> Log.w(TAG, "Error adding document", e));
+
+            try {
+                Thread.sleep(2000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+            startActivity(new Intent(getApplicationContext(), RecipeActivity.class));
+            finish();
+
+//            String img = imgUrl;
+//            String name = edName.getText().toString().trim();
+//            String description = edDesc.getText().toString().trim();
+//            String ingr1 = edIngredient1.getText().toString().trim();
+//            String ingr2 = edIngredient2.getText().toString().trim();
+//            String ingr3 = edIngredient3.getText().toString().trim();
+//
+//            Map<String, Object> recipe = new HashMap<>();
+//            recipe.put("img",img);
+//            recipe.put("name", name);
+//            recipe.put("description", description);
+//            recipe.put("ingr1", ingr1);
+//            recipe.put("ingr2", ingr2);
+//            recipe.put("ingr3", ingr3);
+//
+//
+//            fFirestore.collection("users").document(uId).collection("recipeBook")
+//                .add(recipe)
+//                .addOnSuccessListener(documentReference -> {
+//                    Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
+//
+//
+//
+//
+//
+//
+//                })
+//                .addOnFailureListener(e -> Log.w(TAG, "Error adding document", e));
         });
 
 
+    }
+
+    public void storeData(){
+
+        String img = imgUrl;
+        String name = edName.getText().toString().trim();
+        String description = edDesc.getText().toString().trim();
+        String ingr1 = edIngredient1.getText().toString().trim();
+        String ingr2 = edIngredient2.getText().toString().trim();
+        String ingr3 = edIngredient3.getText().toString().trim();
+
+        Map<String, Object> recipe = new HashMap<>();
+        recipe.put("img",img);
+        recipe.put("name", name);
+        recipe.put("description", description);
+        recipe.put("ingr1", ingr1);
+        recipe.put("ingr2", ingr2);
+        recipe.put("ingr3", ingr3);
+
+
+        fFirestore.collection("users").document(uId).collection("recipeBook")
+                .add(recipe)
+                .addOnSuccessListener(documentReference -> {
+                    Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
+
+                })
+                .addOnFailureListener(e -> Log.w(TAG, "Error adding document", e));
     }
 
     public void getDownloadLink() {
         storageReference.child("images/"+imgUri.getLastPathSegment()).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
             @Override
             public void onSuccess(Uri uri) {
-                Toast.makeText(NewRecipeActivity.this, "URI: "+uri.toString(), Toast.LENGTH_SHORT).show();
+                imgUrl = uri.toString();
+                storeData();
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
@@ -129,8 +175,8 @@ public class NewRecipeActivity extends AppCompatActivity {
 
     public void uploadImg(){
         uploadTask = storageReference.child("images/"+imgUri.getLastPathSegment()).putFile(imgUri);
-
-        uploadTask.addOnSuccessListener(taskSnapshot -> Toast.makeText(NewRecipeActivity.this, "deu bom", Toast.LENGTH_SHORT).show()).addOnFailureListener(e -> Toast.makeText(NewRecipeActivity.this, "deu ruim", Toast.LENGTH_SHORT).show());
+        uploadTask.addOnSuccessListener(taskSnapshot -> getDownloadLink() //Toast.makeText(this, "rá", Toast.LENGTH_SHORT).show()
+        ).addOnFailureListener(e -> Toast.makeText(NewRecipeActivity.this, "deu ruim", Toast.LENGTH_SHORT).show());
 
     }
 
@@ -147,6 +193,8 @@ public class NewRecipeActivity extends AppCompatActivity {
         Intent intent = new Intent(Intent.ACTION_PICK);
         intent.setType("image/*");
         startActivityForResult(intent,1);
+
+
     }
 
     @Override
