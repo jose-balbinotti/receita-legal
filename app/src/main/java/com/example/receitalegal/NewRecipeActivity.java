@@ -87,7 +87,7 @@ public class NewRecipeActivity extends AppCompatActivity {
 
         btnSaveRecipe.setOnClickListener(view -> {
 
-                uploadImg();
+            uploadImg();
 
             try {
                 Thread.sleep(2000);
@@ -97,35 +97,6 @@ public class NewRecipeActivity extends AppCompatActivity {
 
             startActivity(new Intent(getApplicationContext(), RecipeActivity.class));
             finish();
-
-//            String img = imgUrl;
-//            String name = edName.getText().toString().trim();
-//            String description = edDesc.getText().toString().trim();
-//            String ingr1 = edIngredient1.getText().toString().trim();
-//            String ingr2 = edIngredient2.getText().toString().trim();
-//            String ingr3 = edIngredient3.getText().toString().trim();
-//
-//            Map<String, Object> recipe = new HashMap<>();
-//            recipe.put("img",img);
-//            recipe.put("name", name);
-//            recipe.put("description", description);
-//            recipe.put("ingr1", ingr1);
-//            recipe.put("ingr2", ingr2);
-//            recipe.put("ingr3", ingr3);
-//
-//
-//            fFirestore.collection("users").document(uId).collection("recipeBook")
-//                .add(recipe)
-//                .addOnSuccessListener(documentReference -> {
-//                    Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
-//
-//
-//
-//
-//
-//
-//                })
-//                .addOnFailureListener(e -> Log.w(TAG, "Error adding document", e));
         });
 
 
