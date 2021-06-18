@@ -134,7 +134,7 @@
             android:textColor="@color/white"></Button>
 
         <Button
-            android:id="@+id/button_submit_list"
+            android:id="@+id/btnSaveRecipe"
             android:layout_width="match_parent"
             android:layout_height="40dp"
             android:layout_marginLeft="15dp"

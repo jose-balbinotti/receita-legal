@@ -82,14 +82,10 @@ public class NewRecipeActivity extends AppCompatActivity implements View.OnClick
         buttonAdd = findViewById(R.id.button_add);
 
 
-
-//        imageView = findViewById(R.id.imageViewRecipe);
-//        edName = findViewById(R.id.editTextRecipe);
-//        edDesc = findViewById(R.id.editTextDescription);
-//        edIngredient1 = findViewById(R.id.editTextIng1);
-//        edIngredient2 = findViewById(R.id.editTextIng2);
-//        edIngredient3 = findViewById(R.id.editTextIng3);
-//        btnSaveRecipe = findViewById(R.id.btnSaveRecipe);
+        imageView = findViewById(R.id.imageViewRecipe);
+        edName = findViewById(R.id.editTextRecipe);
+        edDesc = findViewById(R.id.editTextDescription);
+        btnSaveRecipe = findViewById(R.id.btnSaveRecipe);
 
         fAuth = FirebaseAuth.getInstance();
         uId = fAuth.getCurrentUser().getUid();
@@ -105,19 +101,19 @@ public class NewRecipeActivity extends AppCompatActivity implements View.OnClick
 
 
         buttonAdd.setOnClickListener(this);
-//        btnSaveRecipe.setOnClickListener(view -> {
-//
-//            uploadImg();
-//
-//            try {
-//                Thread.sleep(2000);
-//            } catch (InterruptedException e) {
-//                e.printStackTrace();
-//            }
-//
-//            startActivity(new Intent(getApplicationContext(), RecipeActivity.class));
-//            finish();
-//        });
+        btnSaveRecipe.setOnClickListener(view -> {
+
+            uploadImg();
+
+            try {
+                Thread.sleep(2000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+            startActivity(new Intent(getApplicationContext(), RecipeActivity.class));
+            finish();
+        });
 
 
     }
@@ -156,83 +152,78 @@ public class NewRecipeActivity extends AppCompatActivity implements View.OnClick
     }
 
 
-//    public void storeData(){
-//
-//        String img = imgUrl;
-//        String name = edName.getText().toString().trim();
-//        String description = edDesc.getText().toString().trim();
-//        String ingr1 = edIngredient1.getText().toString().trim();
-//        String ingr2 = edIngredient2.getText().toString().trim();
-//        String ingr3 = edIngredient3.getText().toString().trim();
-//
-//        Map<String, Object> recipe = new HashMap<>();
-//        recipe.put("img",img);
-//        recipe.put("name", name);
-//        recipe.put("description", description);
-//        recipe.put("ingr1", ingr1);
-//        recipe.put("ingr2", ingr2);
-//        recipe.put("ingr3", ingr3);
-//
-//
-//        fFirestore.collection("users").document(uId).collection("recipeBook")
-//                .add(recipe)
-//                .addOnSuccessListener(documentReference -> {
-//                    Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
-//
-//                })
-//                .addOnFailureListener(e -> Log.w(TAG, "Error adding document", e));
-//    }
-//
-//    public void getDownloadLink() {
-//        storageReference.child("images/"+imgUri.getLastPathSegment()).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-//            @Override
-//            public void onSuccess(Uri uri) {
-//                imgUrl = uri.toString();
-//                storeData();
-//            }
-//        }).addOnFailureListener(new OnFailureListener() {
-//            @Override
-//            public void onFailure(@NonNull @NotNull Exception e) {
-//                Toast.makeText(NewRecipeActivity.this, "Deu erro", Toast.LENGTH_SHORT).show();
-//            }
-//        });
-//    }
-//
-//    public void uploadImg(){
-//        uploadTask = storageReference.child("images/"+imgUri.getLastPathSegment()).putFile(imgUri);
-//        uploadTask.addOnSuccessListener(taskSnapshot -> getDownloadLink() //Toast.makeText(this, "rá", Toast.LENGTH_SHORT).show()
-//        ).addOnFailureListener(e -> Toast.makeText(NewRecipeActivity.this, "deu ruim", Toast.LENGTH_SHORT).show());
-//
-//    }
-//
-//
-//    public void pickImg(View view){
-//
-//        if(ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)!= PackageManager.PERMISSION_GRANTED){
-//            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 100);
-//        } else {
-//            Toast.makeText(this, "Permission Allowed", Toast.LENGTH_SHORT).show();
-//        }
-//
-//
-//        Intent intent = new Intent(Intent.ACTION_PICK);
-//        intent.setType("image/*");
-//        startActivityForResult(intent,1);
-//
-//
-//    }
-//
-//    @Override
-//    protected void onActivityResult(int requestCode, int resultCode, @Nullable @org.jetbrains.annotations.Nullable Intent data) {
-//        super.onActivityResult(requestCode, resultCode, data);
-//
-//        if(resultCode ==RESULT_OK){
-//            imgUri=data.getData();
-//            imageView.setImageURI(imgUri);
-//        }else {
-//            Toast.makeText(this, "you have not picked img", Toast.LENGTH_SHORT).show();
-//        }
-//    }
+    public void storeData(){
+
+        String img = imgUrl;
+        String name = edName.getText().toString().trim();
+        String description = edDesc.getText().toString().trim();
+
+        Map<String, Object> recipe = new HashMap<>();
+        recipe.put("img",img);
+        recipe.put("name", name);
+        recipe.put("description", description);
+
+
+
+        fFirestore.collection("users").document(uId).collection("recipeBook")
+                .add(recipe)
+                .addOnSuccessListener(documentReference -> {
+                    Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
+
+                })
+                .addOnFailureListener(e -> Log.w(TAG, "Error adding document", e));
+    }
+
+    public void getDownloadLink() {
+        storageReference.child("images/"+imgUri.getLastPathSegment()).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+            @Override
+            public void onSuccess(Uri uri) {
+                imgUrl = uri.toString();
+                storeData();
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull @NotNull Exception e) {
+                Toast.makeText(NewRecipeActivity.this, "Deu erro", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    public void uploadImg(){
+        uploadTask = storageReference.child("images/"+imgUri.getLastPathSegment()).putFile(imgUri);
+        uploadTask.addOnSuccessListener(taskSnapshot -> getDownloadLink() //Toast.makeText(this, "rá", Toast.LENGTH_SHORT).show()
+        ).addOnFailureListener(e -> Toast.makeText(NewRecipeActivity.this, "deu ruim", Toast.LENGTH_SHORT).show());
+
+    }
+
+
+    public void pickImg(View view){
+
+        if(ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)!= PackageManager.PERMISSION_GRANTED){
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 100);
+        } else {
+            Toast.makeText(this, "Permission Allowed", Toast.LENGTH_SHORT).show();
+        }
+
+
+        Intent intent = new Intent(Intent.ACTION_PICK);
+        intent.setType("image/*");
+        startActivityForResult(intent,1);
+
+
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable @org.jetbrains.annotations.Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if(resultCode ==RESULT_OK){
+            imgUri=data.getData();
+            imageView.setImageURI(imgUri);
+        }else {
+            Toast.makeText(this, "you have not picked img", Toast.LENGTH_SHORT).show();
+        }
+    }
 
 
 
