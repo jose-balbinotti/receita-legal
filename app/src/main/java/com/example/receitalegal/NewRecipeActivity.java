@@ -49,14 +49,11 @@ public class NewRecipeActivity extends AppCompatActivity implements View.OnClick
     EditText edDesc;
     Button btnSaveRecipe;
     UploadTask uploadTask;
-    UploadTask uploadTaskFire;
-    CollectionReference collectionReference;
 
     String imgUrl;
 
     FirebaseAuth fAuth;
     FirebaseFirestore fFirestore;
-    CollectionReference ref;
     String uId;
     StorageReference storageReference;
     Uri imgUri;
@@ -81,6 +78,7 @@ public class NewRecipeActivity extends AppCompatActivity implements View.OnClick
         btnSaveRecipe = findViewById(R.id.btnSaveRecipe);
 
 
+
         fAuth = FirebaseAuth.getInstance();
         uId = fAuth.getCurrentUser().getUid();
 
@@ -92,7 +90,6 @@ public class NewRecipeActivity extends AppCompatActivity implements View.OnClick
         unitType.add("UN");
         unitType.add("ML");
         unitType.add("L");
-
 
         btnNewIngredient.setOnClickListener(this);
         btnSaveRecipe.setOnClickListener(view -> {
@@ -126,10 +123,13 @@ public class NewRecipeActivity extends AppCompatActivity implements View.OnClick
 
             EditText editTextName = (EditText)recipeView.findViewById(R.id.edit_recipe_name);
             AppCompatSpinner spinnerTeam = (AppCompatSpinner)recipeView.findViewById(R.id.spinner_unit);
+            EditText edQtd = (EditText)recipeView.findViewById(R.id.edit_recipe_qtd);
+//            EditText editText = (EditText)recipeView.findViewById()
 
             Ingredient ingredient = new Ingredient();
             ingredient.setIngredient(editTextName.getText().toString().trim());
             ingredient.setUnitType(unitType.get(spinnerTeam.getSelectedItemPosition()));
+            ingredient.setQuantity(edQtd.getText().toString().trim());
 
 
 //            if(!editTextName.getText().toString().equals("")){
@@ -225,6 +225,7 @@ public class NewRecipeActivity extends AppCompatActivity implements View.OnClick
         String img = imgUrl;
         String name = edName.getText().toString().trim();
         String description = edDesc.getText().toString().trim();
+
 
         Map<String, Object> recipe = new HashMap<>();
 

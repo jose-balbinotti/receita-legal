@@ -5,14 +5,16 @@ import java.io.Serializable;
 public class Ingredient implements Serializable {
     public String unitType;
     public String ingredient;
+    public String quantity;
 
     public Ingredient() {
 
     }
 
-    public Ingredient(String unitType, String ingredient) {
+    public Ingredient(String unitType, String ingredient, String quantity) {
         this.unitType = unitType;
         this.ingredient = ingredient;
+        this.quantity = quantity;
     }
 
     public String getUnitType() {
@@ -29,5 +31,13 @@ public class Ingredient implements Serializable {
 
     public void setIngredient(String ingredient) {
         this.ingredient = ingredient;
+    }
+
+    public String getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(String quantity) {
+        this.quantity = quantity;
     }
 }
