@@ -18,35 +18,37 @@
             android:layout_width="match_parent"
             android:layout_height="150dp"
             android:layout_marginStart="20dp"
+            android:layout_marginTop="20dp"
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="20dp"
             android:onClick="pickImg"
+            android:src="@drawable/addimg_03"
             app:layout_constraintBottom_toTopOf="@+id/editTextRecipe"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             tools:ignore="Suspicious0dp"
-            tools:srcCompat="@tools:sample/backgrounds/scenic" />
+            tools:srcCompat="@drawable/addimg_03" />
 
-        <Button
-            android:id="@+id/btnPickImg"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="25dp"
-            android:layout_marginTop="3dp"
-            android:layout_marginEnd="25dp"
-            android:onClick="pickImg"
-            android:text="Pick image"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/imageViewRecipe" />
+        <!--        <Button-->
+        <!--            android:id="@+id/btnPickImg"-->
+        <!--            android:layout_width="match_parent"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:layout_marginStart="25dp"-->
+        <!--            android:layout_marginTop="3dp"-->
+        <!--            android:layout_marginEnd="25dp"-->
+        <!--            android:onClick="pickImg"-->
+        <!--            android:text="Pick image"-->
+        <!--            app:layout_constraintEnd_toEndOf="parent"-->
+        <!--            app:layout_constraintStart_toStartOf="parent"-->
+        <!--            app:layout_constraintTop_toBottomOf="@+id/imageViewRecipe" />-->
 
         <TextView
             android:id="@+id/textViewNewRecipe"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="150dp"
-            android:layout_marginTop="11dp"
+            android:layout_marginTop="5dp"
             android:layout_marginEnd="150dp"
             android:layout_marginBottom="0dp"
             android:text="New Recipe"
@@ -60,13 +62,16 @@
         <EditText
             android:id="@+id/editTextRecipe"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="40dp"
             android:layout_marginStart="15dp"
             android:layout_marginTop="10dp"
             android:layout_marginEnd="15dp"
+            android:background="@drawable/round_grey"
             android:ems="10"
             android:hint="Recipe Name"
             android:inputType="textPersonName"
+            android:paddingLeft="10dp"
+            android:textSize="14sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
@@ -75,13 +80,16 @@
         <EditText
             android:id="@+id/editTextDescription"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="40dp"
             android:layout_marginStart="15dp"
             android:layout_marginTop="10dp"
             android:layout_marginEnd="15dp"
+            android:background="@drawable/round_grey"
             android:ems="10"
             android:hint="Description"
             android:inputType="textPersonName"
+            android:paddingLeft="10dp"
+            android:textSize="14sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
@@ -90,15 +98,18 @@
         <EditText
             android:id="@+id/editTextHowTo"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="40dp"
             android:layout_marginStart="15dp"
             android:layout_marginLeft="15dp"
             android:layout_marginTop="10dp"
             android:layout_marginEnd="15dp"
             android:layout_marginRight="15dp"
+            android:background="@drawable/round_grey"
             android:ems="10"
             android:hint="How to"
             android:inputType="textPersonName"
+            android:paddingLeft="10dp"
+            android:textSize="14sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
@@ -111,7 +122,7 @@
             android:layout_margin="15dp"
             android:gravity="center"
             android:text="Ingredient List"
-            android:textColor="@color/black"
+            android:textColor="@android:color/secondary_text_light"
             android:textSize="15sp"></TextView>
 
         <LinearLayout

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:orientation="horizontal"
     android:paddingTop="5dp"
     android:paddingBottom="5dp">
 
@@ -11,7 +11,7 @@
         android:id="@+id/edit_recipe_name"
         android:layout_width="150dp"
         android:layout_height="40dp"
-        android:layout_marginLeft="10dp"
+        android:layout_marginLeft="15dp"
         android:layout_marginRight="5dp"
         android:layout_weight="1"
         android:background="@drawable/round_grey"
@@ -31,6 +31,7 @@
         android:hint="Quantity"
         android:inputType="number"
         android:paddingLeft="10dp"
+        android:paddingRight="10dp"
         android:textSize="14sp" />
 
     <FrameLayout
@@ -40,7 +41,7 @@
 
         <androidx.appcompat.widget.AppCompatSpinner
             android:id="@+id/spinner_unit"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="40dp"></androidx.appcompat.widget.AppCompatSpinner>
     </FrameLayout>
 
@@ -48,9 +49,9 @@
         android:id="@+id/image_remove"
         android:layout_width="25dp"
         android:layout_height="25dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginLeft="5dp"
         android:layout_gravity="center_vertical"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="15dp"
         android:src="@drawable/ic_close"
         app:tint="@color/black"></ImageView>
 
