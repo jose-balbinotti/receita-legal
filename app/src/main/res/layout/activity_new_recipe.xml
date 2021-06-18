@@ -143,7 +143,7 @@
             android:background="@drawable/round_primary"
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
-            android:text="Submit List"
+            android:text="Save Recipe"
             android:textAllCaps="false"
             android:textColor="@color/white"></Button>
 
