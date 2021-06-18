@@ -8,7 +8,7 @@
     android:paddingBottom="5dp">
 
     <EditText
-        android:id="@+id/edit_cricketer_name"
+        android:id="@+id/edit_recipe_name"
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:layout_marginLeft="10dp"
@@ -26,7 +26,7 @@
         android:background="@drawable/round_grey">
 
         <androidx.appcompat.widget.AppCompatSpinner
-            android:id="@+id/spinner_team"
+            android:id="@+id/spinner_unit"
             android:layout_width="match_parent"
             android:layout_height="40dp"></androidx.appcompat.widget.AppCompatSpinner>
     </FrameLayout>

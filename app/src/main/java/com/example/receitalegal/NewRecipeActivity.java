@@ -8,10 +8,8 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import android.Manifest;
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -25,26 +23,18 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageMetadata;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import io.grpc.Compressor;
 
 public class NewRecipeActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -68,18 +58,18 @@ public class NewRecipeActivity extends AppCompatActivity implements View.OnClick
     Uri imgUri;
 
     LinearLayout layoutList;
-    Button buttonAdd;
+    Button btnNewIngredient;
     Button buttonSubmitList;
 
-    List<String> teamList = new ArrayList<>();
-    ArrayList<Recipe> cricketersList = new ArrayList<>();
+    List<String> unitType = new ArrayList<>();
+    ArrayList<Ingredient> ingredientList = new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_recipe);
 
         layoutList = findViewById(R.id.layout_list);
-        buttonAdd = findViewById(R.id.button_add);
+        btnNewIngredient = findViewById(R.id.button_add);
 
 
         imageView = findViewById(R.id.imageViewRecipe);
@@ -93,14 +83,14 @@ public class NewRecipeActivity extends AppCompatActivity implements View.OnClick
         fFirestore = FirebaseFirestore.getInstance();
         storageReference = FirebaseStorage.getInstance().getReference();
 
-        teamList.add("Kg");
-        teamList.add("g");
-        teamList.add("Un");
-        teamList.add("ml");
-        teamList.add("l");
+        unitType.add("Kg");
+        unitType.add("g");
+        unitType.add("Un");
+        unitType.add("ml");
+        unitType.add("l");
 
 
-        buttonAdd.setOnClickListener(this);
+        btnNewIngredient.setOnClickListener(this);
         btnSaveRecipe.setOnClickListener(view -> {
 
             uploadImg();
@@ -123,28 +113,76 @@ public class NewRecipeActivity extends AppCompatActivity implements View.OnClick
       addView();
     }
 
+    private ArrayList<Ingredient> buildList() {
+        boolean result = true;
+        ingredientList.clear();
+
+        for (int i = 0; i <layoutList.getChildCount() ; i++) {
+
+            View recipeView = layoutList.getChildAt(i);
+
+            EditText editTextName = (EditText)recipeView.findViewById(R.id.edit_recipe_name);
+            AppCompatSpinner spinnerTeam = (AppCompatSpinner)recipeView.findViewById(R.id.spinner_unit);
+
+            Ingredient ingredient = new Ingredient();
+
+            if(!editTextName.getText().toString().equals("")){
+                ingredient.setIngredient(editTextName.getText().toString());
+            }else{
+                result = false;
+                  break;
+           }
+
+            if(spinnerTeam.getSelectedItemPosition()!=0){
+                ingredient.setUnitType(unitType.get(spinnerTeam.getSelectedItemPosition()));
+            }else {
+              result = false;
+                break;
+            }
+
+            if(ingredientList.size()==0){
+                result = false;
+                Toast.makeText(this,"Ingrediente adicionado",Toast.LENGTH_SHORT).show();
+            }else if(!result){
+                Toast.makeText(this, "Faltando algo", Toast.LENGTH_SHORT).show();
+            }
+
+            ingredientList.add(ingredient);
+
+        }
+
+        if(ingredientList.size()==0){
+            result=false;
+            Toast.makeText(this, "add unit type", Toast.LENGTH_SHORT).show();
+        }else if(!result){
+            Toast.makeText(this, "enter unit type for all ingredientes", Toast.LENGTH_SHORT).show();
+        }
+
+        return ingredientList;
+
+    }
 
 
     private void addView(){
 
-        final View cricketerView = getLayoutInflater().inflate(R.layout.row_add_recipe,null,false);
+        final View recipeView = getLayoutInflater().inflate(R.layout.row_add_recipe,null,false);
 
-        EditText editText = (EditText)cricketerView.findViewById(R.id.edit_cricketer_name);
-        AppCompatSpinner spinnerTeam = (AppCompatSpinner)cricketerView.findViewById(R.id.spinner_team);
-        ImageView imageClose = (ImageView)cricketerView.findViewById(R.id.image_remove);
+        EditText editText = (EditText)recipeView.findViewById(R.id.edit_recipe_name);
+        AppCompatSpinner spinnerTeam = (AppCompatSpinner)recipeView.findViewById(R.id.spinner_unit);
+        ImageView imageClose = (ImageView)recipeView.findViewById(R.id.image_remove);
 
-        ArrayAdapter arrayAdapter = new ArrayAdapter(this,android.R.layout.simple_spinner_item,teamList);
+        ArrayAdapter arrayAdapter = new ArrayAdapter(this,android.R.layout.simple_spinner_item, unitType);
         spinnerTeam.setAdapter(arrayAdapter);
 
 
         imageClose.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                removeView(cricketerView);
+                removeView(recipeView);
             }
         });
 
-        layoutList.addView(cricketerView);
+        layoutList.addView(recipeView);
     }
 
     private void removeView(View view){
@@ -153,6 +191,9 @@ public class NewRecipeActivity extends AppCompatActivity implements View.OnClick
 
 
     public void storeData(){
+        ArrayList<Ingredient> ingredientList = new ArrayList<>();
+        ingredientList = buildList();
+        Toast.makeText(this, "hue"+ingredientList, Toast.LENGTH_SHORT).show();
 
         String img = imgUrl;
         String name = edName.getText().toString().trim();
@@ -162,7 +203,6 @@ public class NewRecipeActivity extends AppCompatActivity implements View.OnClick
         recipe.put("img",img);
         recipe.put("name", name);
         recipe.put("description", description);
-
 
 
         fFirestore.collection("users").document(uId).collection("recipeBook")

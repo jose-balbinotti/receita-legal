@@ -21,7 +21,6 @@ import java.util.ArrayList;
 public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
 
     Context context;
-//    ArrayList<User> userArrayList;
     ArrayList<Recipe> recipeArrayList;
 
     public MyAdapter(Context context, ArrayList<Recipe> recipeArrayList) {
