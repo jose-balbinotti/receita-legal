@@ -21,12 +21,14 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -38,7 +40,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.atomic.AtomicReference;
 
 public class NewRecipeActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -48,6 +49,7 @@ public class NewRecipeActivity extends AppCompatActivity implements View.OnClick
     EditText edDesc;
     Button btnSaveRecipe;
     UploadTask uploadTask;
+    UploadTask uploadTaskFire;
     CollectionReference collectionReference;
 
     String imgUrl;
@@ -85,11 +87,11 @@ public class NewRecipeActivity extends AppCompatActivity implements View.OnClick
         fFirestore = FirebaseFirestore.getInstance();
         storageReference = FirebaseStorage.getInstance().getReference();
 
-        unitType.add("Kg");
-        unitType.add("g");
-        unitType.add("Un");
-        unitType.add("ml");
-        unitType.add("l");
+        unitType.add("KG");
+        unitType.add("G");
+        unitType.add("UN");
+        unitType.add("ML");
+        unitType.add("L");
 
 
         btnNewIngredient.setOnClickListener(this);
@@ -194,49 +196,60 @@ public class NewRecipeActivity extends AppCompatActivity implements View.OnClick
     }
 
 
-    public void createMap(){
+//    public void createMap(){
+//
+//        ArrayList<Map<String, Object>> hue = new ArrayList<>();
+//
+//    }
 
-        ArrayList<Map<String, Object>> hue = new ArrayList<>();
 
-    }
+//    public interface MyCallback {
+//        void onCallback(DocumentReference ref);
+//    }
+//
+//    public void readData(MyCallback myCallback) {
+//        DocumentReference mSettings = fFirestore.collection("user_account_settings").document(uId);
+//        mSettings.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+//            @Override
+//            public void onSuccess(DocumentSnapshot documentSnapshot) {
+//                DocumentReference settings = documentSnapshot.toObject(DocumentReference.class);
+//                myCallback.onCallback(settings);
+//
+//            }
+//        });
+//    }
+
 
     public void storeData(){
 
-        String vamo;
         String img = imgUrl;
         String name = edName.getText().toString().trim();
         String description = edDesc.getText().toString().trim();
 
         Map<String, Object> recipe = new HashMap<>();
 
+
         recipe.put("img",img);
         recipe.put("name", name);
         recipe.put("description", description);
-
-        Map<String, Object> ingredients = new HashMap<>();
-        for (int i = 0; i <ingredientList.size() ; i++) {
-            ingredients.put("name"+i,ingredientList.get(i).getIngredient());
-            ingredients.put("unit"+i,ingredientList.get(i).getUnitType());
-        }
-
-
-        fFirestore.collection("users").document(uId).collection("recipeBook")
-                .add(recipe)
-                .addOnSuccessListener(documentReference -> {
-//                    groupID = documentReference.getId();
-                    Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
-                })
-                .addOnFailureListener(e -> Log.w(TAG, "Error adding document", e));
+        recipe.put("ingredients", ingredientList);
 
 
 
-        fFirestore.collection("users").document(uId).collection("recipeBook").document().collection("ingredients")
-                .add(ingredients)
-                .addOnSuccessListener(documentReference -> {
+   fFirestore.collection("users").document(uId).collection("recipeBook")
+            .add(recipe)
+            .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                @Override
+                public void onSuccess(DocumentReference documentReference) {
                     Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
 
-                })
-                .addOnFailureListener(e -> Log.w(TAG, "Error adding document", e));
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+       @Override
+       public void onFailure(@NonNull @NotNull Exception e) {
+           Log.w(TAG, "Error adding document", e);
+       }
+    });
     }
 
     public void getDownloadLink() {
