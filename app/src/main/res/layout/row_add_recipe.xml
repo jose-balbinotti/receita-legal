@@ -15,7 +15,7 @@
         android:layout_marginRight="5dp"
         android:layout_weight="1"
         android:background="@drawable/round_grey"
-        android:hint="Cricketer Name"
+        android:hint="Ingredient name"
         android:paddingLeft="10dp"
         android:textColor="@color/black"
         android:textSize="14sp"></EditText>
