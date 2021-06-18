@@ -2,6 +2,8 @@
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:drawable="@color/white"/>
     <item
-        android:drawable="@mipmap/ic_launcher_round"
-        android:gravity="center"/>
+        android:drawable="@drawable/orange_travelpictdinner_1484336833"
+        android:gravity="center"
+        android:height="100dp"
+        android:width="100dp"/>
 </layer-list>
