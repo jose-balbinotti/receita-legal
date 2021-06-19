@@ -17,6 +17,7 @@ public class Ingredient implements Serializable {
         this.quantity = quantity;
     }
 
+
     public String getUnitType() {
         return unitType;
     }
@@ -40,4 +41,5 @@ public class Ingredient implements Serializable {
     public void setQuantity(String quantity) {
         this.quantity = quantity;
     }
+
 }

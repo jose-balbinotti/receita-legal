@@ -1,8 +1,6 @@
 package com.example.receitalegal;
 
 import android.content.Context;
-import android.net.Uri;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,18 +15,17 @@ import com.squareup.picasso.Picasso;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
 
     private RecyclerViewClickListener listener;
 
     Context context;
-    ArrayList<Recipe> recipeArrayList;
+    ArrayList<RecipePreview> recipePreviewArrayList;
 
-    public MyAdapter(Context context, ArrayList<Recipe> recipeArrayList, RecyclerViewClickListener listener) {
+    public MyAdapter(Context context, ArrayList<RecipePreview> recipePreviewArrayList, RecyclerViewClickListener listener) {
         this.context = context;
-        this.recipeArrayList = recipeArrayList;
+        this.recipePreviewArrayList = recipePreviewArrayList;
         this.listener = listener;
     }
 
@@ -44,15 +41,15 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull @NotNull MyAdapter.MyViewHolder holder, int position) {
-            Recipe recipe = recipeArrayList.get(position);
-            holder.name.setText(recipe.name);
-            holder.description.setText(recipe.description);
-            Picasso.with(context).load(recipe.img).into(holder.img);
+            RecipePreview recipePreview = recipePreviewArrayList.get(position);
+            holder.name.setText(recipePreview.name);
+            holder.description.setText(recipePreview.description);
+            Picasso.with(context).load(recipePreview.img).into(holder.img);
     }
 
     @Override
     public int getItemCount() {
-        return recipeArrayList.size();
+        return recipePreviewArrayList.size();
     }
 
     public interface RecyclerViewClickListener {

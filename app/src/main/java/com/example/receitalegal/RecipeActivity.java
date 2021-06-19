@@ -23,7 +23,7 @@ public class RecipeActivity extends AppCompatActivity {
 
     TextView txtNameUser;
     RecyclerView recyclerView;
-    ArrayList<Recipe> recipeArrayList;
+    ArrayList<RecipePreview> recipePreviewArrayList;
     MyAdapter myAdapter;
     String uId;
     Controller controller = Controller.getInstance();
@@ -43,11 +43,11 @@ public class RecipeActivity extends AppCompatActivity {
         txtNameUser = findViewById(R.id.txtNameUser);
         txtNameUser.setText(controller.getName());
 
-        recipeArrayList = new ArrayList<Recipe>();
+        recipePreviewArrayList = new ArrayList<RecipePreview>();
 
 
         setOnClickListener();
-        myAdapter = new MyAdapter(RecipeActivity.this, recipeArrayList, listener);
+        myAdapter = new MyAdapter(RecipeActivity.this, recipePreviewArrayList, listener);
         recyclerView.setAdapter(myAdapter);
         EventChangeListener();
 
@@ -59,8 +59,10 @@ public class RecipeActivity extends AppCompatActivity {
             @Override
             public void onClick(View v, int position) {
                 Intent intent = new Intent(getApplicationContext(), RecipeDescriptionActivity.class);
-                intent.putExtra("username", recipeArrayList.get(position).getName());
-                intent.putExtra("img", recipeArrayList.get(position).getImg());
+                intent.putExtra("username", recipePreviewArrayList.get(position).getName());
+                intent.putExtra("img", recipePreviewArrayList.get(position).getImg());
+                intent.putExtra("description", recipePreviewArrayList.get(position).getDescription());
+
                 startActivity(intent);
             }
         };
@@ -78,7 +80,7 @@ public class RecipeActivity extends AppCompatActivity {
 
                         for(DocumentChange dc : value.getDocumentChanges()){
                             if(dc.getType() == DocumentChange.Type.ADDED){
-                                recipeArrayList.add(dc.getDocument().toObject(Recipe.class));
+                                recipePreviewArrayList.add(dc.getDocument().toObject(RecipePreview.class));
                             }
                             myAdapter.notifyDataSetChanged();
                         }

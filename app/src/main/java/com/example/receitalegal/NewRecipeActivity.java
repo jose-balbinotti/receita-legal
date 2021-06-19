@@ -41,6 +41,7 @@ public class NewRecipeActivity extends AppCompatActivity implements View.OnClick
     ImageView imageView;
     EditText edName;
     EditText edDesc;
+    EditText edHow;
     Button btnSaveRecipe;
     UploadTask uploadTask;
 
@@ -65,6 +66,7 @@ public class NewRecipeActivity extends AppCompatActivity implements View.OnClick
         imageView = findViewById(R.id.imageViewRecipe);
         edName = findViewById(R.id.editTextRecipe);
         edDesc = findViewById(R.id.editTextDescription);
+        edHow = findViewById(R.id.editTextHowTo);
         btnSaveRecipe = findViewById(R.id.btnSaveRecipe);
 
         uId = controller.getUid();
@@ -184,12 +186,14 @@ public class NewRecipeActivity extends AppCompatActivity implements View.OnClick
         String img = imgUrl;
         String name = edName.getText().toString().trim();
         String description = edDesc.getText().toString().trim();
+        String howto = edHow.getText().toString().trim();
 
         Map<String, Object> recipe = new HashMap<>();
 
         recipe.put("img",img);
         recipe.put("name", name);
         recipe.put("description", description);
+        recipe.put("howto", howto);
         recipe.put("ingredients", ingredientList);
 
         controller.fFirestore.collection("users").document(uId).collection("recipeBook")
@@ -230,7 +234,6 @@ public class NewRecipeActivity extends AppCompatActivity implements View.OnClick
         ).addOnFailureListener(e -> Toast.makeText(NewRecipeActivity.this, "deu ruim", Toast.LENGTH_SHORT).show());
 
     }
-
 
     public void pickImg(View view){
         if(ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)!= PackageManager.PERMISSION_GRANTED){

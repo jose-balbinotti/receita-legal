@@ -1,16 +1,16 @@
 package com.example.receitalegal;
 
 
-public class Recipe {
+public class RecipePreview {
 
     String name;
     String description;
     String img;
 
-    public Recipe() {
+    public RecipePreview() {
     }
 
-    public Recipe(String name, String description, String img) {
+    public RecipePreview(String name, String description, String img) {
         this.name = name;
         this.description = description;
         this.img = img;
