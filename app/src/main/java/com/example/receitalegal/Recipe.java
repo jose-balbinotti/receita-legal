@@ -1,9 +1,5 @@
 package com.example.receitalegal;
 
-import android.net.Uri;
-
-import java.util.ArrayList;
-
 public class Recipe {
 
     String name;
