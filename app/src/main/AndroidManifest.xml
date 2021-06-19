@@ -12,7 +12,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Receitalegal">
-        <activity android:name=".NewRecipeActivity"></activity>
+        <activity android:name=".RecipeDescriptionActivity"></activity>
+        <activity android:name=".NewRecipeActivity" />
         <activity android:name=".RecipeActivity" />
         <activity
             android:name=".LaunchActivity"

@@ -91,8 +91,6 @@ public class NewRecipeActivity extends AppCompatActivity implements View.OnClick
             startActivity(new Intent(getApplicationContext(), RecipeActivity.class));
             finish();
         });
-
-
     }
 
     @Override

@@ -1,8 +1,7 @@
 package com.example.receitalegal;
 
-import android.net.Uri;
-
 import java.util.ArrayList;
+import java.util.List;
 
 public class Recipe {
 
@@ -18,6 +17,7 @@ public class Recipe {
         this.description = description;
         this.img = img;
     }
+
 
     public String getName() {
         return name;
@@ -38,6 +38,7 @@ public class Recipe {
     public String getImg() {
         return img;
     }
+
 
     public void setImg(String img) {
         this.img = img;

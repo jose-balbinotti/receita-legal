@@ -27,6 +27,7 @@ public class RecipeActivity extends AppCompatActivity {
     MyAdapter myAdapter;
     String uId;
     Controller controller = Controller.getInstance();
+    MyAdapter.RecyclerViewClickListener listener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,12 +45,24 @@ public class RecipeActivity extends AppCompatActivity {
 
         recipeArrayList = new ArrayList<Recipe>();
 
-        myAdapter = new MyAdapter(RecipeActivity.this, recipeArrayList);
 
+        setOnClickListener();
+        myAdapter = new MyAdapter(RecipeActivity.this, recipeArrayList, listener);
         recyclerView.setAdapter(myAdapter);
-
         EventChangeListener();
 
+    }
+
+    private void setOnClickListener() {
+        listener = new MyAdapter.RecyclerViewClickListener(){
+
+            @Override
+            public void onClick(View v, int position) {
+                Intent intent = new Intent(getApplicationContext(), RecipeDescriptionActivity.class);
+                intent.putExtra("username", recipeArrayList.get(position).getName());
+                startActivity(intent);
+            }
+        };
     }
 
     private void EventChangeListener(){

@@ -18,10 +18,5 @@
     <string name="pantry">Pantry</string>
     <string name="descRecipe">TODO</string>
     <string name="recipename">Name</string>
-    <string name="recipedescription">Description</string>
-    <string name="recipeingredient1">Ingredient</string>
-    <string name="recipeingredient3">Ingredient</string>
-    <string name="recipeingredient2">Ingredient</string>
     <string name="recipehow_to">How to</string>
-
 </resources>
