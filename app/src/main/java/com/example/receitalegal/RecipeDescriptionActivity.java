@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -23,6 +24,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.squareup.picasso.Picasso;
 
 import org.jetbrains.annotations.NotNull;
 import org.w3c.dom.Text;
@@ -46,6 +48,8 @@ public class RecipeDescriptionActivity extends AppCompatActivity {
     List<Ingredient> ingredients = new ArrayList<>();
     private final String TAG = null;
 
+    String username = "Username not set";
+    String imgurl = "Img not set";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,38 +58,25 @@ public class RecipeDescriptionActivity extends AppCompatActivity {
 
         btn = findViewById(R.id.btn);
         TextView nameTxt = findViewById(R.id.nameTextView);
-//        ImageView img = findViewById(R.id.);
+        ImageView img = findViewById(R.id.imageViewRecipe);
 
-//        Toast.makeText(this, ""+img, Toast.LENGTH_SHORT).show();
 
-        String username = "Username not set";
         Bundle extras = getIntent().getExtras();
         if(extras != null){
             username = extras.getString("username");
+            imgurl = extras.getString("img");
         }
 
         nameTxt.setText(username);
 
+        Picasso.with(RecipeDescriptionActivity.this).load(imgurl).into(img);
+//        img.setImageURI(Uri.parse(imgurl));
+
+
     }
 
-//    public void ativa(View view){
-//        userIdRef.get().addOnCompleteListener(task -> {
-//            if(task.isSuccessful()){
-//                DocumentSnapshot document = task.getResult();
-//                List<Ingredient> ingredients = document.toObject(IngredientDocument.class).ingredients;
-//                Toast.makeText(RecipeDescriptionActivity.this, "FUDEU"+ingredients, Toast.LENGTH_SHORT).show();
-//                if(document.exists()){
-//
-//                    Toast.makeText(RecipeDescriptionActivity.this, "FUDEU"+ingredients, Toast.LENGTH_SHORT).show();
-//                }else{
-//                    Toast.makeText(this, "falho", Toast.LENGTH_SHORT).show();
-//                }
-//            }
-//        });
-//    }
-
     public void ativa(View view){
-        controller.fFirestore.collection("users").document(uId).collection("recipeBook")
+        controller.fFirestore.collection("users").document(uId).collection("recipeBook").whereEqualTo("img",imgurl)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
@@ -93,6 +84,7 @@ public class RecipeDescriptionActivity extends AppCompatActivity {
                         if(task.isSuccessful()){
                             for(QueryDocumentSnapshot document : task.getResult()){
                                 Log.d(TAG, document.getId() + " => " + document.getData());
+                                
                             }
                     }else {
                             Log.d(TAG, "Error getting documents: ", task.getException());

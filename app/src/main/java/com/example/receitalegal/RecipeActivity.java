@@ -60,6 +60,7 @@ public class RecipeActivity extends AppCompatActivity {
             public void onClick(View v, int position) {
                 Intent intent = new Intent(getApplicationContext(), RecipeDescriptionActivity.class);
                 intent.putExtra("username", recipeArrayList.get(position).getName());
+                intent.putExtra("img", recipeArrayList.get(position).getImg());
                 startActivity(intent);
             }
         };

@@ -74,7 +74,10 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
 
         @Override
         public void onClick(View view) {
-            listener.onClick(view, getAdapterPosition());
+            listener.onClick(view, getAbsoluteAdapterPosition());
         }
+//        public void onClick(View view) {
+//            listener.onClick(view, getAdapterPosition());
+//        }
     }
 }
