@@ -84,7 +84,8 @@ public class RecipeDescriptionActivity extends AppCompatActivity {
                         if(task.isSuccessful()){
                             for(QueryDocumentSnapshot document : task.getResult()){
                                 Log.d(TAG, document.getId() + " => " + document.getData());
-                                
+                                List<Ingredient> ingredients;
+                                ingredients = document.toObject(IngredientsDocument.class).ingredient;
                             }
                     }else {
                             Log.d(TAG, "Error getting documents: ", task.getException());
