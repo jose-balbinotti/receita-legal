@@ -54,9 +54,9 @@ public class RecipeDescriptionActivity extends AppCompatActivity {
 
         btn = findViewById(R.id.btn);
         TextView nameTxt = findViewById(R.id.nameTextView);
-        ImageView img = findViewById(R.id.);
+//        ImageView img = findViewById(R.id.);
 
-        Toast.makeText(this, ""+img, Toast.LENGTH_SHORT).show();
+//        Toast.makeText(this, ""+img, Toast.LENGTH_SHORT).show();
 
         String username = "Username not set";
         Bundle extras = getIntent().getExtras();
