@@ -26,15 +26,17 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="#00FFFFFF"
+            android:paddingLeft="10dp"
             android:text="post title"
             android:textColor="#000"
-            android:textSize="20dp"></TextView>
+            android:textSize="34dp"></TextView>
 
         <TextView
             android:id="@+id/post_description"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="#00FFFFFF"
+            android:paddingLeft="10dp"
             android:text="post description"
             android:textColor="#000"></TextView>
 

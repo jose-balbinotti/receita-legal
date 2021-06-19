@@ -14,7 +14,7 @@ public class Recipe {
     public Recipe() {
     }
 
-    public Recipe(String name, String description, String img, String ingr1, String ingr2, String ingr3) {
+    public Recipe(String name, String description, String img) {
         this.name = name;
         this.description = description;
 //    this.img = Uri.parse(img);

@@ -57,7 +57,6 @@ public class NewRecipeActivity extends AppCompatActivity implements View.OnClick
     String uId;
     StorageReference storageReference;
     Uri imgUri;
-    String groupID;
     LinearLayout layoutList;
     Button btnNewIngredient;
 
