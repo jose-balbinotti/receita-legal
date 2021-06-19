@@ -4,9 +4,12 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.ActionBar;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.icu.number.CompactNotation;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.service.controls.Control;
 import android.util.Log;
 import android.view.View;
@@ -25,7 +28,7 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 public class MainActivity extends AppCompatActivity {
 
     TextView txtNameUser;
-    Controller controller = new Controller();
+    Controller controller = Controller.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,24 +36,13 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         txtNameUser = findViewById(R.id.txtNameUser);
-
-        FirebaseFirestore fFirestore = FirebaseFirestore.getInstance();
-        DocumentReference docRef = fFirestore.collection("users").document(controller.getUid());
-        docRef.addSnapshotListener(this, new EventListener<DocumentSnapshot>() {
-            @Override
-            public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
-                String name = documentSnapshot.getString("name");
-                if (name != null) {
-                    txtNameUser.setText(name);
-                    controller.setName(name);
-                }
-            }
-        });
+        txtNameUser.setText(controller.getName());
     }
 
     public void logout(View view){
-        FirebaseAuth.getInstance().signOut();
+        controller.fAuth.signOut();
         startActivity(new Intent(getApplicationContext(), LoginActivity.class));
+        controller = null;
         finish();
     }
 
@@ -62,5 +54,12 @@ public class MainActivity extends AppCompatActivity {
     public void recipe (View view) {
         startActivity(new Intent(getApplicationContext(), RecipeActivity.class));
         finish();
+    }
+
+    @Override
+    public void onBackPressed(){
+        startActivity(new Intent(this, MainActivity.class));
+        finishAffinity();
+        return;
     }
 }

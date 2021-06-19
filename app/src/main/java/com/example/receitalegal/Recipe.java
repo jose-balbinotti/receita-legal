@@ -10,14 +10,12 @@ public class Recipe {
     String description;
     String img;
 
-
     public Recipe() {
     }
 
     public Recipe(String name, String description, String img) {
         this.name = name;
         this.description = description;
-//    this.img = Uri.parse(img);
         this.img = img;
     }
 

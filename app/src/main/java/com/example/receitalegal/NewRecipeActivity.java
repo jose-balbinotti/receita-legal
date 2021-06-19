@@ -21,15 +21,9 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -52,13 +46,12 @@ public class NewRecipeActivity extends AppCompatActivity implements View.OnClick
 
     String imgUrl;
 
-    FirebaseAuth fAuth;
-    FirebaseFirestore fFirestore;
     String uId;
     StorageReference storageReference;
     Uri imgUri;
     LinearLayout layoutList;
     Button btnNewIngredient;
+    Controller controller = Controller.getInstance();
 
     List<String> unitType = new ArrayList<>();
     ArrayList<Ingredient> ingredientList = new ArrayList<>();
@@ -69,19 +62,13 @@ public class NewRecipeActivity extends AppCompatActivity implements View.OnClick
 
         layoutList = findViewById(R.id.layout_list);
         btnNewIngredient = findViewById(R.id.button_add);
-
-
         imageView = findViewById(R.id.imageViewRecipe);
         edName = findViewById(R.id.editTextRecipe);
         edDesc = findViewById(R.id.editTextDescription);
         btnSaveRecipe = findViewById(R.id.btnSaveRecipe);
 
+        uId = controller.getUid();
 
-
-        fAuth = FirebaseAuth.getInstance();
-        uId = fAuth.getCurrentUser().getUid();
-
-        fFirestore = FirebaseFirestore.getInstance();
         storageReference = FirebaseStorage.getInstance().getReference();
 
         unitType.add("KG");
@@ -194,62 +181,32 @@ public class NewRecipeActivity extends AppCompatActivity implements View.OnClick
         layoutList.removeView(view);
     }
 
-
-//    public void createMap(){
-//
-//        ArrayList<Map<String, Object>> hue = new ArrayList<>();
-//
-//    }
-
-
-//    public interface MyCallback {
-//        void onCallback(DocumentReference ref);
-//    }
-//
-//    public void readData(MyCallback myCallback) {
-//        DocumentReference mSettings = fFirestore.collection("user_account_settings").document(uId);
-//        mSettings.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-//            @Override
-//            public void onSuccess(DocumentSnapshot documentSnapshot) {
-//                DocumentReference settings = documentSnapshot.toObject(DocumentReference.class);
-//                myCallback.onCallback(settings);
-//
-//            }
-//        });
-//    }
-
-
     public void storeData(){
 
         String img = imgUrl;
         String name = edName.getText().toString().trim();
         String description = edDesc.getText().toString().trim();
 
-
         Map<String, Object> recipe = new HashMap<>();
-
 
         recipe.put("img",img);
         recipe.put("name", name);
         recipe.put("description", description);
         recipe.put("ingredients", ingredientList);
 
-
-
-   fFirestore.collection("users").document(uId).collection("recipeBook")
-            .add(recipe)
-            .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                @Override
-                public void onSuccess(DocumentReference documentReference) {
-                    Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
-
-                }
-            }).addOnFailureListener(new OnFailureListener() {
-       @Override
-       public void onFailure(@NonNull @NotNull Exception e) {
-           Log.w(TAG, "Error adding document", e);
-       }
-    });
+        controller.fFirestore.collection("users").document(uId).collection("recipeBook")
+                .add(recipe)
+                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                    @Override
+                    public void onSuccess(DocumentReference documentReference) {
+                        Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull @NotNull Exception e) {
+                        Log.w(TAG, "Error adding document", e);
+                    }
+                });
     }
 
     public void getDownloadLink() {
@@ -278,19 +235,15 @@ public class NewRecipeActivity extends AppCompatActivity implements View.OnClick
 
 
     public void pickImg(View view){
-
         if(ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)!= PackageManager.PERMISSION_GRANTED){
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 100);
         } else {
             Toast.makeText(this, "Permission Allowed", Toast.LENGTH_SHORT).show();
         }
 
-
         Intent intent = new Intent(Intent.ACTION_PICK);
         intent.setType("image/*");
         startActivityForResult(intent,1);
-
-
     }
 
     @Override
@@ -305,6 +258,10 @@ public class NewRecipeActivity extends AppCompatActivity implements View.OnClick
         }
     }
 
-
-
+    @Override
+    public void onBackPressed(){
+        startActivity(new Intent(this, RecipeActivity.class));
+        finishAffinity();
+        return;
+    }
 }

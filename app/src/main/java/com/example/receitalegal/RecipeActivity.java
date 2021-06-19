@@ -9,11 +9,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.TextView;
 
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.EventListener;
-import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
 
@@ -22,32 +21,29 @@ import java.util.ArrayList;
 
 public class RecipeActivity extends AppCompatActivity {
 
+    TextView txtNameUser;
     RecyclerView recyclerView;
-    ArrayList<User> userArrayList;
     ArrayList<Recipe> recipeArrayList;
     MyAdapter myAdapter;
-    FirebaseFirestore db;
-    FirebaseAuth fAuth;
     String uId;
+    Controller controller = Controller.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipe);
 
-        fAuth = FirebaseAuth.getInstance();
-        uId = fAuth.getCurrentUser().getUid();
+        uId = controller.getUid();
 
         recyclerView = findViewById(R.id.recyclerRecipe);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        db = FirebaseFirestore.getInstance();
-        //userArrayList = new ArrayList<User>();
+        txtNameUser = findViewById(R.id.txtNameUser);
+        txtNameUser.setText(controller.getName());
 
         recipeArrayList = new ArrayList<Recipe>();
 
-        //myAdapter = new MyAdapter(RecipeActivity.this, userArrayList);
         myAdapter = new MyAdapter(RecipeActivity.this, recipeArrayList);
 
         recyclerView.setAdapter(myAdapter);
@@ -57,34 +53,29 @@ public class RecipeActivity extends AppCompatActivity {
     }
 
     private void EventChangeListener(){
-        db.collection("users").document(uId).collection("recipeBook")
+        controller.fFirestore.collection("users").document(uId).collection("recipeBook")
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override
                     public void onEvent(@Nullable @org.jetbrains.annotations.Nullable QuerySnapshot value, @Nullable @org.jetbrains.annotations.Nullable FirebaseFirestoreException error) {
-
                         if(error != null){
                             Log.e("Firestore error",error.getMessage());
                             return;
                         }
 
                         for(DocumentChange dc : value.getDocumentChanges()){
-
                             if(dc.getType() == DocumentChange.Type.ADDED){
-
                                 recipeArrayList.add(dc.getDocument().toObject(Recipe.class));
                             }
-
                             myAdapter.notifyDataSetChanged();
-
                         }
-
                     }
                 });
     }
 
-    public void logout(View view) {
-        FirebaseAuth.getInstance().signOut();
+    public void logout(View view){
+        controller.fAuth.signOut();
         startActivity(new Intent(getApplicationContext(), LoginActivity.class));
+        controller = null;
         finish();
     }
 
@@ -93,5 +84,11 @@ public class RecipeActivity extends AppCompatActivity {
         finish();
     }
 
+    @Override
+    public void onBackPressed(){
+        startActivity(new Intent(this, MainActivity.class));
+        finishAffinity();
+        return;
+    }
 
 }

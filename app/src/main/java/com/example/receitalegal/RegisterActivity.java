@@ -29,9 +29,8 @@ public class RegisterActivity extends AppCompatActivity {
     EditText rName, rEmail, rPassword;
     Button rBtnRegister;
     TextView rBtnAlready;
-    FirebaseAuth fAuth;
-    FirebaseFirestore fFirestore;
     String uId;
+    Controller controller = Controller.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,10 +43,7 @@ public class RegisterActivity extends AppCompatActivity {
         rBtnRegister = findViewById(R.id.btnRegister);
         rBtnAlready = findViewById(R.id.btnAlready);
 
-        fAuth = FirebaseAuth.getInstance();
-        fFirestore = FirebaseFirestore.getInstance();
-
-        if(fAuth.getCurrentUser() != null){
+        if(controller.fAuth.getCurrentUser() != null){
             startActivity(new Intent(getApplicationContext(), MainActivity.class));
             finish();
         }
@@ -74,16 +70,16 @@ public class RegisterActivity extends AppCompatActivity {
             }
 
             // register into firebase
-            fAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+            controller.fAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                 @Override
                 public void onComplete(@NonNull @org.jetbrains.annotations.NotNull Task<AuthResult> task) {
                     if(task.isSuccessful()){
                         Toast.makeText(RegisterActivity.this, "User created", Toast.LENGTH_SHORT).show();
 
                         //get user ID
-                        uId = fAuth.getCurrentUser().getUid();
+                        uId = controller.fAuth.getCurrentUser().getUid();
                         //creating collection users
-                        DocumentReference documentReference = fFirestore.collection("users").document(uId);
+                        DocumentReference documentReference = controller.fFirestore.collection("users").document(uId);
                         Map<String,Object> user = new HashMap<>();
                         user.put("name",name);
                         user.put("email",email);
@@ -109,5 +105,12 @@ public class RegisterActivity extends AppCompatActivity {
     public void login(View view){
         startActivity(new Intent(getApplicationContext(), LoginActivity.class));
         finish();
+    }
+
+    @Override
+    public void onBackPressed(){
+        startActivity(new Intent(this, LoginActivity.class));
+        finishAffinity();
+        return;
     }
 }
