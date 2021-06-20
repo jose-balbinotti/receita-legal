@@ -29,9 +29,14 @@ public class Controller {
     public Controller() {
         this.fAuth = FirebaseAuth.getInstance();
         this.fFirestore = FirebaseFirestore.getInstance();
+        this.name = "";
+        this.email = "";
+        this.uid = "";
+        this.numRecipes = 0;
     }
 
     public static Controller getInstance() {
+        Log.e("getInstance", "instance of controller");
         if (instance == null) {
             instance = new Controller();
         }

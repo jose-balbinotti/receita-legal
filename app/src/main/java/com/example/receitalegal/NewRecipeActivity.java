@@ -317,32 +317,6 @@ public class NewRecipeActivity extends AppCompatActivity implements View.OnClick
 
             uploadTask = storageReference.child("images/"+imgUri.getLastPathSegment()).putFile(imgUri);
 
-            if(docId != null){
-                DocumentReference docRef = controller.fFirestore.collection("users")
-                    .document(uId)
-                    .collection("recipeBook")
-                    .document(docId);
-                docRef.addSnapshotListener(this, new EventListener<DocumentSnapshot>() {
-                    @Override
-                    public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
-                        String img = documentSnapshot.getString("img");
-                        Toast.makeText(NewRecipeActivity.this, "imgString"+ img, Toast.LENGTH_SHORT).show();
-
-                        storageReference.child("images/"+img).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
-                            @Override
-                            public void onSuccess(Void unused) {
-                                Toast.makeText(NewRecipeActivity.this, "File deleted !!", Toast.LENGTH_SHORT).show();
-                            }
-                        }).addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull @NotNull Exception e) {
-                                Toast.makeText(NewRecipeActivity.this, "Failed to delete !!", Toast.LENGTH_SHORT).show();
-                            }
-                        });
-                    }
-                });
-            }
-
             uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
