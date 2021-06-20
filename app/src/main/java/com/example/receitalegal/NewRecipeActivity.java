@@ -12,6 +12,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -19,6 +20,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.SpinnerAdapter;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
@@ -46,6 +48,11 @@ public class NewRecipeActivity extends AppCompatActivity implements View.OnClick
     UploadTask uploadTask;
 
     String imgUrl;
+    String username;
+    String description;
+    String howto;
+    String activity;
+    List<Ingredient> ingredients = new ArrayList<>();
 
     String uId;
     StorageReference storageReference;
@@ -79,7 +86,51 @@ public class NewRecipeActivity extends AppCompatActivity implements View.OnClick
         unitType.add("ML");
         unitType.add("L");
 
+
+        Bundle extras = getIntent().getExtras();
+        if(extras != null){
+            activity = extras.getString("activity");
+            username = extras.getString("username");
+            imgUrl = extras.getString("img");
+            description = extras.getString("description");
+            ingredients = getIntent().getParcelableArrayListExtra("ingredients");
+            howto = extras.getString("howto");
+
+            System.out.println(activity);
+            System.out.println(username);
+            System.out.println(imgUrl);
+            System.out.println(description);
+            System.out.println(ingredients);
+            System.out.println(howto);
+        }
+
+        if(activity.equals("edit")){
+
+            for (int i = 0; i < ingredients.size() ; i++) {
+                addView();
+            }
+
+            for (int i = 0; i <layoutList.getChildCount() ; i++) {
+
+                View recipeView = layoutList.getChildAt(i);
+
+                EditText editTextName = (EditText)recipeView.findViewById(R.id.edit_recipe_name);
+                AppCompatSpinner spinnerTeam = (AppCompatSpinner)recipeView.findViewById(R.id.spinner_unit);
+                EditText edQtd = (EditText)recipeView.findViewById(R.id.edit_recipe_qtd);
+
+                ingredients.get(i).getUnitType();
+
+                spinnerTeam.setSelection(3);
+                editTextName.setText(ingredients.get(i).getIngredient());
+                edQtd.setText(ingredients.get(i).getQuantity());
+
+            }
+
+        }
+
         btnNewIngredient.setOnClickListener(this);
+
+
         btnSaveRecipe.setOnClickListener(view -> {
 
             uploadImg();
@@ -110,51 +161,19 @@ public class NewRecipeActivity extends AppCompatActivity implements View.OnClick
             EditText editTextName = (EditText)recipeView.findViewById(R.id.edit_recipe_name);
             AppCompatSpinner spinnerTeam = (AppCompatSpinner)recipeView.findViewById(R.id.spinner_unit);
             EditText edQtd = (EditText)recipeView.findViewById(R.id.edit_recipe_qtd);
-//            EditText editText = (EditText)recipeView.findViewById()
 
             Ingredient ingredient = new Ingredient();
             ingredient.setIngredient(editTextName.getText().toString().trim());
             ingredient.setUnitType(unitType.get(spinnerTeam.getSelectedItemPosition()));
             ingredient.setQuantity(edQtd.getText().toString().trim());
 
-
-//            if(!editTextName.getText().toString().equals("")){
-//                ingredient.setIngredient(editTextName.getText().toString());
-//            }else{
-//                result = false;
-//                  break;
-//           }
-//
-//            if(spinnerTeam.getSelectedItemPosition()!=0){
-//                ingredient.setUnitType(unitType.get(spinnerTeam.getSelectedItemPosition()));
-//            }else {
-//              result = false;
-//                break;
-//            }
-//
-//            if(ingredientList.size()==0){
-//                result = false;
-//                Toast.makeText(this,"Ingrediente adicionado",Toast.LENGTH_SHORT).show();
-//            }else if(!result){
-//                Toast.makeText(this, "Faltando algo", Toast.LENGTH_SHORT).show();
-//            }
-
             ingredientList.add(ingredient);
 
         }
-
-//        if(ingredientList.size()==0){
-//            result=false;
-//            Toast.makeText(this, "add unit type", Toast.LENGTH_SHORT).show();
-//        }else if(!result){
-//            Toast.makeText(this, "enter unit type for all ingredientes", Toast.LENGTH_SHORT).show();
-//        }
-
-//
-
     }
 
 
+    //add new line to ingredient
     private void addView(){
 
         final View recipeView = getLayoutInflater().inflate(R.layout.row_add_recipe,null,false);
@@ -177,6 +196,7 @@ public class NewRecipeActivity extends AppCompatActivity implements View.OnClick
         layoutList.addView(recipeView);
     }
 
+    //remove line of ingredient
     private void removeView(View view){
         layoutList.removeView(view);
     }

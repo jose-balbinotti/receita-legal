@@ -41,7 +41,7 @@
                 android:layout_marginTop="5dp"
                 android:layout_marginRight="5dp"
                 android:background="@drawable/round_primary"
-                app:srcCompat="@drawable/pencil_icon" />
+                app:srcCompat="@drawable/ic_close" />
 
             <ImageButton
                 android:id="@+id/btnEditRecipe"
@@ -50,7 +50,7 @@
                 android:layout_marginTop="5dp"
                 android:layout_marginRight="15dp"
                 android:background="@drawable/round_primary"
-                app:srcCompat="@drawable/ic_add" />
+                app:srcCompat="@drawable/ic_edit" />
         </LinearLayout>
 
         <TextView

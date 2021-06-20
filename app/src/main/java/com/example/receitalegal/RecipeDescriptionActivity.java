@@ -4,7 +4,9 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.media.Image;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.text.Layout;
 import android.util.Log;
 import android.view.Gravity;
@@ -47,6 +49,7 @@ public class RecipeDescriptionActivity extends AppCompatActivity {
     CollectionReference userRef = rootRef.collection("recipeBook");
     DocumentReference userIdRef = userRef.document(uId);
     List<Ingredient> ingredients = new ArrayList<>();
+    ArrayList<Ingredient> ingredientArrayList = new ArrayList<>();
     private final String TAG = null;
 
     LinearLayout layout;
@@ -66,6 +69,7 @@ public class RecipeDescriptionActivity extends AppCompatActivity {
         TextView descTxt = findViewById(R.id.descriptionTextView);
         ImageView img = findViewById(R.id.imageViewRecipe);
         ImageButton btnDeleteRecipe = findViewById(R.id.btnDeleteRecipe);
+        ImageButton btnEditRecipe = findViewById(R.id.btnEditRecipe);
 
 
         Bundle extras = getIntent().getExtras();
@@ -75,12 +79,32 @@ public class RecipeDescriptionActivity extends AppCompatActivity {
             description = extras.getString("description");
         }
 
-
-
         Picasso.with(RecipeDescriptionActivity.this).load(imgurl).into(img);
         nameTxt.setText(username);
         descTxt.setText(description);
 
+        btnEditRecipe.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+
+                Intent intent = new Intent(getApplicationContext(), NewRecipeActivity.class);
+                intent.putExtra("activity","edit");
+                intent.putExtra("username", username);
+                intent.putExtra("img", imgurl);
+                intent.putExtra("description", description);
+                intent.putExtra("howto", howto);
+
+                for (int i = 0; i < ingredients.size() ; i++) {
+                    ingredientArrayList.add(ingredients.get(i));
+                }
+
+                System.out.println("CORNOS SEM MÃE" + ingredientArrayList);
+
+                intent.putParcelableArrayListExtra("ingredients", ingredientArrayList);
+                startActivity(intent);
+            }
+        });
 
 
         btnDeleteRecipe.setOnClickListener(new View.OnClickListener() {
@@ -106,77 +130,69 @@ public class RecipeDescriptionActivity extends AppCompatActivity {
             }
         });
 
-
         controller.fFirestore.collection("users").document(uId).collection("recipeBook").whereEqualTo("img",imgurl)
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull @NotNull Task<QuerySnapshot> task) {
-                        if(task.isSuccessful()){
-                            for(QueryDocumentSnapshot document : task.getResult()){
-                                Log.d(TAG, document.getId() + " => " + document.getData());
+        .get()
+        .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull @NotNull Task<QuerySnapshot> task) {
+                if(task.isSuccessful()){
+                    for(QueryDocumentSnapshot document : task.getResult()){
+                        Log.d(TAG, document.getId() + " => " + document.getData());
 
-                                docId = document.getId();
+                        docId = document.getId();
 
-                                ingredients = document.toObject(IngredientsDocument.class).ingredients;
-                                howto = document.getString("howto");
+                        ingredients = document.toObject(IngredientsDocument.class).ingredients;
+                        howto = document.getString("howto");
 
-                                int step= 1;
+                        int step= 1;
 
-                                String[] result = howto.split(",");
+                        String[] result = howto.split(",");
 
-                                for (int i = 0; i <result.length ; i++) {
-                                    final View recipeView = getLayoutInflater().inflate(R.layout.row_add_recipe,null,false);
-                                    recipeView.findViewById(R.id.spinner_unit).setVisibility(View.GONE);
-                                    recipeView.findViewById(R.id.image_remove).setVisibility(View.GONE);
-                                    recipeView.findViewById(R.id.edit_recipe_qtd).setVisibility(View.GONE);
+                        for (int i = 0; i <result.length ; i++) {
+                            final View recipeView = getLayoutInflater().inflate(R.layout.row_add_recipe,null,false);
+                            recipeView.findViewById(R.id.spinner_unit).setVisibility(View.GONE);
+                            recipeView.findViewById(R.id.image_remove).setVisibility(View.GONE);
+                            recipeView.findViewById(R.id.edit_recipe_qtd).setVisibility(View.GONE);
 
-                                    EditText editText = (EditText)recipeView.findViewById(R.id.edit_recipe_name);
+                            EditText editText = (EditText)recipeView.findViewById(R.id.edit_recipe_name);
 
-                                    editText.setEnabled(false);
-                                    editText.setText("Step: " + step + " - " + result[i]);
-                                    step++;
+                            editText.setEnabled(false);
+                            editText.setText("Step: " + step + " - " + result[i]);
+                            step++;
 
-                                    layout.addView(recipeView);
+                            layout.addView(recipeView);
 //
-                                }
-                                step = 0;
+                        }
+                        step = 0;
 
-                                TextView tv = new TextView(RecipeDescriptionActivity.this);
-                                tv.setText("Ingredient List");
-                                tv.setGravity(Gravity.CENTER);
-                                step++;
-                                layout.addView(tv);
+                        TextView tv = new TextView(RecipeDescriptionActivity.this);
+                        tv.setText("Ingredient List");
+                        tv.setGravity(Gravity.CENTER);
+                        step++;
+                        layout.addView(tv);
 
-                                for (int i = 0; i < ingredients.size(); i++) {
-                                    final View recipeView = getLayoutInflater().inflate(R.layout.row_add_recipe,null,false);
-                                    recipeView.findViewById(R.id.spinner_unit).setVisibility(View.GONE);
-                                    recipeView.findViewById(R.id.image_remove).setVisibility(View.GONE);
+                        for (int i = 0; i < ingredients.size(); i++) {
+                            final View recipeView = getLayoutInflater().inflate(R.layout.row_add_recipe,null,false);
+                            recipeView.findViewById(R.id.spinner_unit).setVisibility(View.GONE);
+                            recipeView.findViewById(R.id.image_remove).setVisibility(View.GONE);
 
-                                    EditText editText = (EditText)recipeView.findViewById(R.id.edit_recipe_name);
-                                    EditText editQtd = (EditText)recipeView.findViewById(R.id.edit_recipe_qtd);
-                                    ImageView imageClose = (ImageView)recipeView.findViewById(R.id.image_remove);
+                            EditText editText = (EditText)recipeView.findViewById(R.id.edit_recipe_name);
+                            EditText editQtd = (EditText)recipeView.findViewById(R.id.edit_recipe_qtd);
+                            ImageView imageClose = (ImageView)recipeView.findViewById(R.id.image_remove);
 
-                                    editText.setEnabled(false);
-                                    editQtd.setEnabled(false);
+                            editText.setEnabled(false);
+                            editQtd.setEnabled(false);
 
-                                    editText.setText(ingredients.get(i).getIngredient());
-                                    editQtd.setText(ingredients.get(i).getQuantity() + " " + ingredients.get(i).getUnitType());
+                            editText.setText(ingredients.get(i).getIngredient());
+                            editQtd.setText(ingredients.get(i).getQuantity() + " " + ingredients.get(i).getUnitType());
 
-
-                                    layout.addView(recipeView);
-
-                                }
-
-//
-
-                            }
-                        }else {
-                            Log.d(TAG, "Error getting documents: ", task.getException());
+                            layout.addView(recipeView);
                         }
                     }
-//
-
-                });
+                }else {
+                    Log.d(TAG, "Error getting documents: ", task.getException());
+                }
+            }
+        });
     }
 }
