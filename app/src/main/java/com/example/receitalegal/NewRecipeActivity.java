@@ -26,6 +26,9 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.SetOptions;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -57,9 +60,10 @@ public class NewRecipeActivity extends AppCompatActivity implements View.OnClick
     String docId;
     List<Ingredient> ingredients = new ArrayList<>();
 
-
+    Boolean hasImg = false;
     String uId;
     StorageReference storageReference;
+    Uri imgUriAux;
     Uri imgUri;
     LinearLayout layoutList;
     Button btnNewIngredient;
@@ -79,6 +83,7 @@ public class NewRecipeActivity extends AppCompatActivity implements View.OnClick
         edDesc = findViewById(R.id.editTextDescription);
         edHow = findViewById(R.id.editTextHowTo);
         btnSaveRecipe = findViewById(R.id.btnSaveRecipe);
+
 
         uId = controller.getUid();
 
@@ -155,7 +160,7 @@ public class NewRecipeActivity extends AppCompatActivity implements View.OnClick
 
         btnSaveRecipe.setOnClickListener(view -> {
 
-            if (imageView.getDrawable() == null) {
+            if (!hasImg) {
                 Toast.makeText(this,"Select an image before saving!",Toast.LENGTH_SHORT).show();
             } else if (edName.getText().toString().trim().equals("")) {
                 Toast.makeText(this,"Empty recipe name. Empty field is not allowed!",Toast.LENGTH_SHORT).show();
@@ -309,7 +314,35 @@ public class NewRecipeActivity extends AppCompatActivity implements View.OnClick
     public void uploadImg(){
 
         if(imgUri != null){
+
+
             uploadTask = storageReference.child("images/"+imgUri.getLastPathSegment()).putFile(imgUri);
+
+            if(docId != null){
+                DocumentReference docRef = controller.fFirestore.collection("users")
+                    .document(uId)
+                    .collection("recipeBook")
+                    .document(docId);
+                docRef.addSnapshotListener(this, new EventListener<DocumentSnapshot>() {
+                    @Override
+                    public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
+                        String img = documentSnapshot.getString("img");
+                        Toast.makeText(NewRecipeActivity.this, "imgString"+ img, Toast.LENGTH_SHORT).show();
+
+                        storageReference.child("images/"+img).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void unused) {
+                                Toast.makeText(NewRecipeActivity.this, "File deleted !!", Toast.LENGTH_SHORT).show();
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull @NotNull Exception e) {
+                                Toast.makeText(NewRecipeActivity.this, "Failed to delete !!", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    }
+                });
+            }
 
             uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
@@ -345,6 +378,7 @@ public class NewRecipeActivity extends AppCompatActivity implements View.OnClick
         if(resultCode ==RESULT_OK){
             imgUri=data.getData();
             imageView.setImageURI(imgUri);
+            hasImg = true;
         }else {
             Toast.makeText(this, "you have not picked img", Toast.LENGTH_SHORT).show();
         }
