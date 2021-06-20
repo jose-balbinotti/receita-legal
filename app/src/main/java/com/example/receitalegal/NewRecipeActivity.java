@@ -84,7 +84,6 @@ public class NewRecipeActivity extends AppCompatActivity implements View.OnClick
         edHow = findViewById(R.id.editTextHowTo);
         btnSaveRecipe = findViewById(R.id.btnSaveRecipe);
 
-
         uId = controller.getUid();
 
         storageReference = FirebaseStorage.getInstance().getReference();
@@ -257,14 +256,13 @@ public class NewRecipeActivity extends AppCompatActivity implements View.OnClick
         recipe.put("howto", howto);
         recipe.put("ingredients", ingredientList);
 
-
-
         if(activity != null) {
             controller.fFirestore.collection("users").document(uId).collection("recipeBook").document(docId)
                     .set(recipe, SetOptions.merge())
                     .addOnCompleteListener(new OnCompleteListener<Void>() {
                 @Override
                 public void onComplete(@NonNull @NotNull Task<Void> task) {
+                    controller.countRecipes();
                     startActivity(new Intent(getApplicationContext(), RecipeActivity.class));
                     finish();
                 }
@@ -280,6 +278,7 @@ public class NewRecipeActivity extends AppCompatActivity implements View.OnClick
                     .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                         @Override
                         public void onSuccess(DocumentReference documentReference) {
+                            controller.countRecipes();
                             startActivity(new Intent(getApplicationContext(), RecipeActivity.class));
                             finish();
                             Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());

@@ -1,5 +1,7 @@
 package com.example.receitalegal;
 
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
@@ -7,6 +9,8 @@ import androidx.annotation.Nullable;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentChange;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
@@ -58,6 +62,26 @@ public class Controller {
         this.uid = uid;
     }
 
+    public void launchMain(Activity activity) {
+
+        String uid = fAuth.getCurrentUser().getUid();
+        DocumentReference docRef = fFirestore.collection("users").document(uid);
+        docRef.addSnapshotListener(activity, new EventListener<DocumentSnapshot>() {
+            @Override
+            public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
+                String email = documentSnapshot.getString("email");
+                String name = documentSnapshot.getString("name");
+                if (name != null) {
+                    setName(name);
+                    setEmail(email);
+                    setUid(uid);
+                    countRecipes();
+                    activity.startActivity(new Intent(activity.getApplicationContext(), MainActivity.class));
+                }
+            }
+        });
+    }
+
     public void countRecipes() {
         fFirestore.collection("users").document(this.uid).collection("recipeBook")
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
@@ -68,10 +92,11 @@ public class Controller {
                             return;
                         }
 
-                        int count = 0;
+                        Integer count = 0;
                         for(DocumentChange dc : value.getDocumentChanges()){
                             if(dc.getType() == DocumentChange.Type.ADDED){
                                 count++;
+                                Log.e("asdasd", "asdjkhaskjdasdjkhaiksdjhajksdkahjsdasjkdhajkd " + count.toString());
                                 setNumRecipes(count);
                             }
                         }
