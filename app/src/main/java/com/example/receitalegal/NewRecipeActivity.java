@@ -29,6 +29,8 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.SetOptions;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -56,14 +58,20 @@ public class NewRecipeActivity extends AppCompatActivity implements View.OnClick
     String recipeName;
     String description;
     String howto;
-    String activity = null;
+    String activity = "";
     String docId;
+    String novaUrl;
+    StorageReference httpsReference;
     List<Ingredient> ingredients = new ArrayList<>();
+
+    Uri uri;
+    Uri olduri;
+    String huee;
+    String hue;
 
     Boolean hasImg = false;
     String uId;
     StorageReference storageReference;
-    Uri imgUriAux;
     Uri imgUri;
     LinearLayout layoutList;
     Button btnNewIngredient;
@@ -159,7 +167,7 @@ public class NewRecipeActivity extends AppCompatActivity implements View.OnClick
 
         btnSaveRecipe.setOnClickListener(view -> {
 
-            if (!hasImg) {
+            if (!hasImg && !activity.equals("edit")) {
                 Toast.makeText(this,"Select an image before saving!",Toast.LENGTH_SHORT).show();
             } else if (edName.getText().toString().trim().equals("")) {
                 Toast.makeText(this,"Empty recipe name. Empty field is not allowed!",Toast.LENGTH_SHORT).show();
@@ -170,7 +178,6 @@ public class NewRecipeActivity extends AppCompatActivity implements View.OnClick
             } else {
 
                 uploadImg();
-
 
             }
         });
@@ -256,7 +263,7 @@ public class NewRecipeActivity extends AppCompatActivity implements View.OnClick
         recipe.put("howto", howto);
         recipe.put("ingredients", ingredientList);
 
-        if(activity != null) {
+        if(!activity.equals("")) {
             controller.fFirestore.collection("users").document(uId).collection("recipeBook").document(docId)
                     .set(recipe, SetOptions.merge())
                     .addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -293,40 +300,84 @@ public class NewRecipeActivity extends AppCompatActivity implements View.OnClick
 
     }
 
-    public void getDownloadLink() {
-        buildList();
 
-        if (imgUri != null) {
-            storageReference.child("images/"+imgUri.getLastPathSegment()).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                @Override
-                public void onSuccess(Uri uri) {
-                    imgUrl = uri.toString();
-                    storeData();
-                }
-            });
-        }else{
-            storeData();
-        }
+    public void uploadImg() {
 
-    }
-
-    public void uploadImg(){
-
-        if(imgUri != null){
-
-
-            uploadTask = storageReference.child("images/"+imgUri.getLastPathSegment()).putFile(imgUri);
+        if (activity.equals("edit")) {
+            uploadTask = storageReference
+                    .child("images/" + imgUri.getLastPathSegment())
+                    .putFile(imgUri);
 
             uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                    getDownloadLink();
+//                    getDownloadLink();
+
+                    taskSnapshot.getStorage().getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
+                        @Override
+                        public void onComplete(@NonNull @NotNull Task<Uri> task) {
+                            novaUrl = task.getResult().toString();
+
+                            if (activity.equals("edit")) {
+                                uri = Uri.parse(novaUrl);
+                                olduri = Uri.parse(imgUrl);
+                                huee = olduri.getLastPathSegment();
+                                hue = uri.getLastPathSegment();
+                            } else {
+                                imgUrl = novaUrl;
+                            }
+
+                            Toast.makeText(NewRecipeActivity.this, "" + hue + "\n" + huee, Toast.LENGTH_SHORT).show();
+                            Log.e(TAG, "hue" + huee);
+
+                            storageReference.child(huee).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void unused) {
+                                    imgUrl = novaUrl;
+                                    storeData();
+                                }
+                            }).addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull @NotNull Exception e) {
+
+                                }
+                            });
+//
+                        }
+                    });
+
                 }
             }).addOnFailureListener(new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull @NotNull Exception taskSnapshot) {
                     storeData();
-                    Toast.makeText(NewRecipeActivity.this, "img already exists", Toast.LENGTH_SHORT).show();
+                }
+            });
+        } else {
+            uploadTask = storageReference.child("images/" + imgUri.getLastPathSegment()).putFile(imgUri);
+
+            uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+
+                    taskSnapshot.getStorage().getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
+                        @Override
+                        public void onComplete(@NonNull @NotNull Task<Uri> task) {
+                            novaUrl = task.getResult().toString();
+                            imgUrl = novaUrl;
+                            storeData();
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull @NotNull Exception e) {
+
+                        }
+                    });
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull @NotNull Exception e) {
+
                 }
             });
         }
