@@ -132,17 +132,26 @@ public class NewRecipeActivity extends AppCompatActivity implements View.OnClick
 
 
         btnSaveRecipe.setOnClickListener(view -> {
+            if (imageView.getDrawable() == null) {
+                Toast.makeText(this,"Select an image before saving!",Toast.LENGTH_SHORT).show();
+            } else if (edName.getText().toString().trim().equals("")) {
+                Toast.makeText(this,"Empty recipe name. Empty field is not allowed!",Toast.LENGTH_SHORT).show();
+            } else if (edDesc.getText().toString().trim().equals("")) {
+                Toast.makeText(this,"Empty description. Empty field is not allowed!",Toast.LENGTH_SHORT).show();
+            } else if (edHow.getText().toString().trim().equals("")) {
+                Toast.makeText(this,"Empty how to. Empty field is not allowed!",Toast.LENGTH_SHORT).show();
+            } else {
+                uploadImg();
 
-            uploadImg();
+                try {
+                    Thread.sleep(2000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
 
-            try {
-                Thread.sleep(2000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+                startActivity(new Intent(getApplicationContext(), RecipeActivity.class));
+                finish();
             }
-
-            startActivity(new Intent(getApplicationContext(), RecipeActivity.class));
-            finish();
         });
     }
 
