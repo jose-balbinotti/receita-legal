@@ -22,6 +22,7 @@ import java.util.ArrayList;
 public class RecipeActivity extends AppCompatActivity {
 
     TextView txtNameUser;
+    TextView txtNumRecipes;
     RecyclerView recyclerView;
     ArrayList<RecipePreview> recipePreviewArrayList;
     MyAdapter myAdapter;
@@ -43,6 +44,9 @@ public class RecipeActivity extends AppCompatActivity {
 
         txtNameUser = findViewById(R.id.txtNameUser);
         txtNameUser.setText(controller.getName());
+
+        txtNumRecipes = findViewById(R.id.txtNumRecipes);
+        txtNumRecipes.setText(controller.getNumRecipes().toString() + " recipes");
 
         recipePreviewArrayList = new ArrayList<RecipePreview>();
 

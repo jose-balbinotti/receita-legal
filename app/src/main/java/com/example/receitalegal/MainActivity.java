@@ -4,12 +4,14 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
 
     TextView txtNameUser;
+    TextView txtNumRecipes;
     Controller controller = Controller.getInstance();
 
     @Override
@@ -19,6 +21,9 @@ public class MainActivity extends AppCompatActivity {
 
         txtNameUser = findViewById(R.id.txtNameUser);
         txtNameUser.setText(controller.getName());
+
+        txtNumRecipes = findViewById(R.id.txtNumRecipes);
+        txtNumRecipes.setText(controller.getNumRecipes().toString() + " recipes");
     }
 
     public void logout(View view){

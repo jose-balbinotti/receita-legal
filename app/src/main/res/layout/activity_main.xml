@@ -29,6 +29,7 @@
             </TextView>
 
             <TextView
+                android:id="@+id/txtNumRecipes"
                 android:layout_marginTop="6dp"
                 android:layout_below="@+id/txtNameUser"
                 android:text="@string/userrecipes"

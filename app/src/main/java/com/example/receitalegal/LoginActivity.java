@@ -72,11 +72,14 @@ public class LoginActivity extends AppCompatActivity {
                                     String email = documentSnapshot.getString("email");
                                     String name = documentSnapshot.getString("name");
                                     if (name != null) {
-                                        setVariablesController(name, email, uid);
+                                        controller.setName(name);
+                                        controller.setEmail(email);
+                                        controller.setUid(uid);
+                                        controller.countRecipes();
+                                        startActivity(new Intent(getApplicationContext(), MainActivity.class));
                                     }
                                 }
                             });
-                            startActivity(new Intent(getApplicationContext(), MainActivity.class));
                         }else {
                             Toast.makeText(LoginActivity.this, "Error !" +task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                         }
@@ -84,12 +87,6 @@ public class LoginActivity extends AppCompatActivity {
                 });
             }
         });
-    }
-
-    public void setVariablesController(String name, String email, String uid) {
-        controller.setName(name);
-        controller.setEmail(email);
-        controller.setUid(uid);
     }
 
     public void register(View view){

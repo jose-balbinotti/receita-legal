@@ -37,17 +37,14 @@ public class LaunchActivity extends AppCompatActivity {
                     String email = documentSnapshot.getString("email");
                     String name = documentSnapshot.getString("name");
                     if (name != null) {
-                        setVariablesController(name, email, uid);
+                        controller.setName(name);
+                        controller.setEmail(email);
+                        controller.setUid(uid);
+                        controller.countRecipes();
+                        startActivity(new Intent(getApplicationContext(), MainActivity.class));
                     }
                 }
             });
-            startActivity(new Intent(getApplicationContext(), MainActivity.class));
         }
-    }
-
-    public void setVariablesController(String name, String email, String uid) {
-        controller.setName(name);
-        controller.setEmail(email);
-        controller.setUid(uid);
     }
 }
