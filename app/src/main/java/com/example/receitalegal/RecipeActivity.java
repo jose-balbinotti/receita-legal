@@ -50,11 +50,12 @@ public class RecipeActivity extends AppCompatActivity {
         setOnClickListener();
         myAdapter = new MyAdapter(RecipeActivity.this, recipePreviewArrayList, listener);
         recyclerView.setAdapter(myAdapter);
-
         EventChangeListener();
 
     }
 
+
+    //new intent to description based on clicked item on recycler view
     private void setOnClickListener() {
         listener = new MyAdapter.RecyclerViewClickListener(){
 

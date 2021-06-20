@@ -167,8 +167,7 @@ public class NewRecipeActivity extends AppCompatActivity implements View.OnClick
 
                 uploadImg();
 
-                startActivity(new Intent(getApplicationContext(), RecipeActivity.class));
-                finish();
+
             }
         });
     }
@@ -222,7 +221,6 @@ public class NewRecipeActivity extends AppCompatActivity implements View.OnClick
         ArrayAdapter arrayAdapter = new ArrayAdapter(this,android.R.layout.simple_spinner_item, unitType);
         spinnerTeam.setAdapter(arrayAdapter);
 
-
         imageClose.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -258,9 +256,12 @@ public class NewRecipeActivity extends AppCompatActivity implements View.OnClick
 
         if(activity != null) {
             controller.fFirestore.collection("users").document(uId).collection("recipeBook").document(docId)
-                    .set(recipe).addOnCompleteListener(new OnCompleteListener<Void>() {
+                    .set(recipe, SetOptions.merge())
+                    .addOnCompleteListener(new OnCompleteListener<Void>() {
                 @Override
                 public void onComplete(@NonNull @NotNull Task<Void> task) {
+                    startActivity(new Intent(getApplicationContext(), RecipeActivity.class));
+                    finish();
                 }
             }).addOnFailureListener(new OnFailureListener() {
                 @Override
@@ -274,6 +275,8 @@ public class NewRecipeActivity extends AppCompatActivity implements View.OnClick
                     .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                         @Override
                         public void onSuccess(DocumentReference documentReference) {
+                            startActivity(new Intent(getApplicationContext(), RecipeActivity.class));
+                            finish();
                             Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
                         }
                     }).addOnFailureListener(new OnFailureListener() {
@@ -308,9 +311,12 @@ public class NewRecipeActivity extends AppCompatActivity implements View.OnClick
         if(imgUri != null){
             uploadTask = storageReference.child("images/"+imgUri.getLastPathSegment()).putFile(imgUri);
 
-            uploadTask.addOnCompleteListener(taskSnapshot -> { getDownloadLink();
-                    }
-            ).addOnFailureListener(new OnFailureListener() {
+            uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                    getDownloadLink();
+                }
+            }).addOnFailureListener(new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull @NotNull Exception taskSnapshot) {
                     storeData();
@@ -318,8 +324,6 @@ public class NewRecipeActivity extends AppCompatActivity implements View.OnClick
                 }
             });
         }
-
-
     }
 
     public void pickImg(View view){

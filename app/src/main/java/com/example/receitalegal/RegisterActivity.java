@@ -81,15 +81,18 @@ public class RegisterActivity extends AppCompatActivity {
                         Map<String,Object> user = new HashMap<>();
                         user.put("name",name);
                         user.put("email",email);
+
                         //insert into database
-                        documentReference.set(user).addOnSuccessListener(new OnSuccessListener<Void>() {
+                        documentReference.set(user)
+                                .addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
                             public void onSuccess(Void aVoid) {
+                                startActivity(new Intent(getApplicationContext(), MainActivity.class));
                               Log.d(TAG,"onSucess: USER PROFILE IS CREATED FOR "+ uId);
                             }
                         });
 
-                        startActivity(new Intent(getApplicationContext(), MainActivity.class));
+
                     }else {
                         Toast.makeText(RegisterActivity.this, "Error !" +task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                     }
