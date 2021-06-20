@@ -167,12 +167,6 @@ public class NewRecipeActivity extends AppCompatActivity implements View.OnClick
 
                 uploadImg();
 
-//                try {
-//                    Thread.sleep(5000);
-//                } catch (InterruptedException e) {
-//                    e.printStackTrace();
-//                }
-
                 startActivity(new Intent(getApplicationContext(), RecipeActivity.class));
                 finish();
             }
@@ -310,10 +304,11 @@ public class NewRecipeActivity extends AppCompatActivity implements View.OnClick
     }
 
     public void uploadImg(){
+
         if(imgUri != null){
             uploadTask = storageReference.child("images/"+imgUri.getLastPathSegment()).putFile(imgUri);
-            uploadTask.addOnSuccessListener(taskSnapshot -> {
-                        getDownloadLink();
+
+            uploadTask.addOnCompleteListener(taskSnapshot -> { getDownloadLink();
                     }
             ).addOnFailureListener(new OnFailureListener() {
                 @Override
@@ -322,9 +317,9 @@ public class NewRecipeActivity extends AppCompatActivity implements View.OnClick
                     Toast.makeText(NewRecipeActivity.this, "img already exists", Toast.LENGTH_SHORT).show();
                 }
             });
-        }else{
-
         }
+
+
     }
 
     public void pickImg(View view){

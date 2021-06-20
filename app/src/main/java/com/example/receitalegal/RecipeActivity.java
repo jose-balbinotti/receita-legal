@@ -50,6 +50,7 @@ public class RecipeActivity extends AppCompatActivity {
         setOnClickListener();
         myAdapter = new MyAdapter(RecipeActivity.this, recipePreviewArrayList, listener);
         recyclerView.setAdapter(myAdapter);
+
         EventChangeListener();
 
     }
