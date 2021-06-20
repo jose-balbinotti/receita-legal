@@ -102,31 +102,32 @@ public class NewRecipeActivity extends AppCompatActivity implements View.OnClick
             System.out.println(description);
             System.out.println(ingredients);
             System.out.println(howto);
+            if(activity.equals("edit")){
+
+                for (int i = 0; i < ingredients.size() ; i++) {
+                    addView();
+                }
+
+                for (int i = 0; i <layoutList.getChildCount() ; i++) {
+
+                    View recipeView = layoutList.getChildAt(i);
+
+                    EditText editTextName = (EditText)recipeView.findViewById(R.id.edit_recipe_name);
+                    AppCompatSpinner spinnerTeam = (AppCompatSpinner)recipeView.findViewById(R.id.spinner_unit);
+                    EditText edQtd = (EditText)recipeView.findViewById(R.id.edit_recipe_qtd);
+
+                    ingredients.get(i).getUnitType();
+
+                    spinnerTeam.setSelection(3);
+                    editTextName.setText(ingredients.get(i).getIngredient());
+                    edQtd.setText(ingredients.get(i).getQuantity());
+
+                }
+
+            }
         }
 
-        if(activity.equals("edit")){
 
-            for (int i = 0; i < ingredients.size() ; i++) {
-                addView();
-            }
-
-            for (int i = 0; i <layoutList.getChildCount() ; i++) {
-
-                View recipeView = layoutList.getChildAt(i);
-
-                EditText editTextName = (EditText)recipeView.findViewById(R.id.edit_recipe_name);
-                AppCompatSpinner spinnerTeam = (AppCompatSpinner)recipeView.findViewById(R.id.spinner_unit);
-                EditText edQtd = (EditText)recipeView.findViewById(R.id.edit_recipe_qtd);
-
-                ingredients.get(i).getUnitType();
-
-                spinnerTeam.setSelection(3);
-                editTextName.setText(ingredients.get(i).getIngredient());
-                edQtd.setText(ingredients.get(i).getQuantity());
-
-            }
-
-        }
 
         btnNewIngredient.setOnClickListener(this);
 
