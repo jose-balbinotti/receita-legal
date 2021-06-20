@@ -297,62 +297,67 @@ public class NewRecipeActivity extends AppCompatActivity implements View.OnClick
                 }
             });
         }
-
     }
-
 
     public void uploadImg() {
 
         if (activity.equals("edit")) {
-            uploadTask = storageReference
-                    .child("images/" + imgUri.getLastPathSegment())
-                    .putFile(imgUri);
 
-            uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                @Override
-                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-//                    getDownloadLink();
+            if(hasImg)
+            {
+                uploadTask = storageReference
+                        .child("images/" + imgUri.getLastPathSegment())
+                        .putFile(imgUri);
 
-                    taskSnapshot.getStorage().getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
-                        @Override
-                        public void onComplete(@NonNull @NotNull Task<Uri> task) {
-                            novaUrl = task.getResult().toString();
+                uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
 
-                            if (activity.equals("edit")) {
-                                uri = Uri.parse(novaUrl);
-                                olduri = Uri.parse(imgUrl);
-                                huee = olduri.getLastPathSegment();
-                                hue = uri.getLastPathSegment();
-                            } else {
-                                imgUrl = novaUrl;
-                            }
 
-                            Toast.makeText(NewRecipeActivity.this, "" + hue + "\n" + huee, Toast.LENGTH_SHORT).show();
-                            Log.e(TAG, "hue" + huee);
+                        taskSnapshot.getStorage().getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
+                            @Override
+                            public void onComplete(@NonNull @NotNull Task<Uri> task) {
+                                novaUrl = task.getResult().toString();
 
-                            storageReference.child(huee).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
-                                @Override
-                                public void onSuccess(Void unused) {
+                                if (activity.equals("edit")) {
+                                    uri = Uri.parse(novaUrl);
+                                    olduri = Uri.parse(imgUrl);
+                                    huee = olduri.getLastPathSegment();
+                                    hue = uri.getLastPathSegment();
+                                } else {
                                     imgUrl = novaUrl;
-                                    storeData();
                                 }
-                            }).addOnFailureListener(new OnFailureListener() {
-                                @Override
-                                public void onFailure(@NonNull @NotNull Exception e) {
 
-                                }
-                            });
+                                Toast.makeText(NewRecipeActivity.this, "" + hue + "\n" + huee, Toast.LENGTH_SHORT).show();
+                                Log.e(TAG, "hue" + huee);
+
+                                storageReference.child(huee).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void unused) {
+                                        imgUrl = novaUrl;
+                                        storeData();
+                                    }
+                                }).addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull @NotNull Exception e) {
+
+                                    }
+                                });
 //
-                        }
-                    });
+                            }
+                        });
 
-                }
-            }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull @NotNull Exception taskSnapshot) {
-                    storeData();
-                }
-            });
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull @NotNull Exception taskSnapshot) {
+                        Toast.makeText(NewRecipeActivity.this, "Something went wrong !", Toast.LENGTH_SHORT).show();
+                    }
+                });
+            } else {
+                storeData();
+            }
+
         } else {
             uploadTask = storageReference.child("images/" + imgUri.getLastPathSegment()).putFile(imgUri);
 

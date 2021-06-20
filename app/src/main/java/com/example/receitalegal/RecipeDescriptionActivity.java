@@ -28,6 +28,7 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.storage.FirebaseStorage;
 import com.squareup.picasso.Picasso;
 
 import org.jetbrains.annotations.NotNull;
@@ -71,7 +72,6 @@ public class RecipeDescriptionActivity extends AppCompatActivity {
         ImageButton btnDeleteRecipe = findViewById(R.id.btnDeleteRecipe);
         ImageButton btnEditRecipe = findViewById(R.id.btnEditRecipe);
 
-
         Bundle extras = getIntent().getExtras();
         if(extras != null){
             username = extras.getString("username");
@@ -99,8 +99,6 @@ public class RecipeDescriptionActivity extends AppCompatActivity {
                     ingredientArrayList.add(ingredients.get(i));
                 }
 
-                System.out.println("CORNOS SEM MÃE" + ingredientArrayList);
-
                 intent.putParcelableArrayListExtra("ingredients", ingredientArrayList);
                 startActivity(intent);
             }
@@ -110,6 +108,9 @@ public class RecipeDescriptionActivity extends AppCompatActivity {
         btnDeleteRecipe.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+
+
                 controller.fFirestore
                 .collection("users")
                 .document(uId).collection("recipeBook")
@@ -120,6 +121,9 @@ public class RecipeDescriptionActivity extends AppCompatActivity {
                     public void onComplete(@NonNull @NotNull Task<Void> task) {
                         Log.d(TAG,"DocumentSnapshot sucessfully deleted!");
                         startActivity(new Intent(getApplicationContext(), RecipeActivity.class));
+
+
+
                     }
                 }).addOnFailureListener(new OnFailureListener() {
                     @Override
