@@ -3,17 +3,23 @@ package com.example.receitalegal;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.text.Layout;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
@@ -35,6 +41,7 @@ public class RecipeDescriptionActivity extends AppCompatActivity {
 
     Controller controller = Controller.getInstance();
     String uId = controller.getUid();
+    String docId;
 
     FirebaseFirestore rootRef = controller.fFirestore;
     CollectionReference userRef = rootRef.collection("recipeBook");
@@ -54,12 +61,11 @@ public class RecipeDescriptionActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipe_description);
 
-//        btn = findViewById(R.id.btn);
         layout = findViewById(R.id.linearlayout);
         TextView nameTxt = findViewById(R.id.nameTextView);
         TextView descTxt = findViewById(R.id.descriptionTextView);
         ImageView img = findViewById(R.id.imageViewRecipe);
-
+        ImageButton btnDeleteRecipe = findViewById(R.id.btnDeleteRecipe);
 
 
         Bundle extras = getIntent().getExtras();
@@ -69,12 +75,36 @@ public class RecipeDescriptionActivity extends AppCompatActivity {
             description = extras.getString("description");
         }
 
+
+
         Picasso.with(RecipeDescriptionActivity.this).load(imgurl).into(img);
         nameTxt.setText(username);
         descTxt.setText(description);
 
 
-//        img.setImageURI(Uri.parse(imgurl));
+
+        btnDeleteRecipe.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                controller.fFirestore
+                .collection("users")
+                .document(uId).collection("recipeBook")
+                .document(docId)
+                .delete()
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull @NotNull Task<Void> task) {
+                        Log.d(TAG,"DocumentSnapshot sucessfully deleted!");
+                        startActivity(new Intent(getApplicationContext(), RecipeActivity.class));
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull @NotNull Exception e) {
+                        Log.w(TAG,"Error deleting document", e);
+                    }
+                });
+            }
+        });
 
 
         controller.fFirestore.collection("users").document(uId).collection("recipeBook").whereEqualTo("img",imgurl)
@@ -86,16 +116,14 @@ public class RecipeDescriptionActivity extends AppCompatActivity {
                             for(QueryDocumentSnapshot document : task.getResult()){
                                 Log.d(TAG, document.getId() + " => " + document.getData());
 
+                                docId = document.getId();
+
                                 ingredients = document.toObject(IngredientsDocument.class).ingredients;
                                 howto = document.getString("howto");
 
                                 int step= 1;
 
                                 String[] result = howto.split(",");
-//                                for (int x=0; x < result.length; x++){
-//                                    System.out.println("Step: " + step + " - " + result[x]);
-//
-//                                }
 
                                 for (int i = 0; i <result.length ; i++) {
                                     final View recipeView = getLayoutInflater().inflate(R.layout.row_add_recipe,null,false);
@@ -105,9 +133,9 @@ public class RecipeDescriptionActivity extends AppCompatActivity {
 
                                     EditText editText = (EditText)recipeView.findViewById(R.id.edit_recipe_name);
 
+                                    editText.setEnabled(false);
                                     editText.setText("Step: " + step + " - " + result[i]);
                                     step++;
-
 
                                     layout.addView(recipeView);
 //
@@ -120,8 +148,6 @@ public class RecipeDescriptionActivity extends AppCompatActivity {
                                 step++;
                                 layout.addView(tv);
 
-
-
                                 for (int i = 0; i < ingredients.size(); i++) {
                                     final View recipeView = getLayoutInflater().inflate(R.layout.row_add_recipe,null,false);
                                     recipeView.findViewById(R.id.spinner_unit).setVisibility(View.GONE);
@@ -130,7 +156,6 @@ public class RecipeDescriptionActivity extends AppCompatActivity {
                                     EditText editText = (EditText)recipeView.findViewById(R.id.edit_recipe_name);
                                     EditText editQtd = (EditText)recipeView.findViewById(R.id.edit_recipe_qtd);
                                     ImageView imageClose = (ImageView)recipeView.findViewById(R.id.image_remove);
-
 
                                     editText.setEnabled(false);
                                     editQtd.setEnabled(false);
@@ -153,6 +178,5 @@ public class RecipeDescriptionActivity extends AppCompatActivity {
 //
 
                 });
-
     }
 }
