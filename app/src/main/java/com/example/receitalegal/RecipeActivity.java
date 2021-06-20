@@ -32,6 +32,7 @@ public class RecipeActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_recipe);
 
         uId = controller.getUid();
@@ -62,7 +63,6 @@ public class RecipeActivity extends AppCompatActivity {
                 intent.putExtra("username", recipePreviewArrayList.get(position).getName());
                 intent.putExtra("img", recipePreviewArrayList.get(position).getImg());
                 intent.putExtra("description", recipePreviewArrayList.get(position).getDescription());
-
                 startActivity(intent);
             }
         };

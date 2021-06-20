@@ -52,7 +52,8 @@
         android:layout_gravity="center_vertical"
         android:layout_marginLeft="5dp"
         android:layout_marginRight="15dp"
+        android:background="@drawable/round_primary"
         android:src="@drawable/ic_close"
-        app:tint="@color/black"></ImageView>
+        app:tint="@color/white"></ImageView>
 
 </LinearLayout>

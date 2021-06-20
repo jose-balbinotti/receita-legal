@@ -12,7 +12,6 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -20,15 +19,18 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.SpinnerAdapter;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.SetOptions;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.squareup.picasso.Picasso;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -48,11 +50,13 @@ public class NewRecipeActivity extends AppCompatActivity implements View.OnClick
     UploadTask uploadTask;
 
     String imgUrl;
-    String username;
+    String recipeName;
     String description;
     String howto;
-    String activity;
+    String activity = null;
+    String docId;
     List<Ingredient> ingredients = new ArrayList<>();
+
 
     String uId;
     StorageReference storageReference;
@@ -86,23 +90,42 @@ public class NewRecipeActivity extends AppCompatActivity implements View.OnClick
         unitType.add("ML");
         unitType.add("L");
 
-
         Bundle extras = getIntent().getExtras();
         if(extras != null){
             activity = extras.getString("activity");
-            username = extras.getString("username");
+            recipeName = extras.getString("username");
             imgUrl = extras.getString("img");
             description = extras.getString("description");
             ingredients = getIntent().getParcelableArrayListExtra("ingredients");
             howto = extras.getString("howto");
+            docId = extras.getString("docid");
 
-            System.out.println(activity);
-            System.out.println(username);
-            System.out.println(imgUrl);
-            System.out.println(description);
-            System.out.println(ingredients);
-            System.out.println(howto);
-            if(activity.equals("edit")){
+            imgUri = Uri.parse(imgUrl);
+
+            int[] spinner = new int[ingredients.size()];
+
+            if(activity != null){
+
+                Picasso.with(NewRecipeActivity.this).load(imgUrl).into(imageView);
+                edName.setText(recipeName);
+                edDesc.setText(description);
+                edHow.setText(howto);
+
+
+                for (int i = 0; i < ingredients.size(); i++) {
+                    if(tipoSpinner(i,"KG")){
+                        spinner[i] = 0;
+                    }else if (tipoSpinner(i, "G")){
+                        spinner[i] = 1;
+                    }else if (tipoSpinner(i, "UN")){
+                        spinner[i] = 2;
+                    }else if (tipoSpinner(i, "ML")){
+                        spinner[i] = 3;
+                    }else{
+                        spinner[i] = 4;
+                    }
+                }
+
 
                 for (int i = 0; i < ingredients.size() ; i++) {
                     addView();
@@ -116,9 +139,7 @@ public class NewRecipeActivity extends AppCompatActivity implements View.OnClick
                     AppCompatSpinner spinnerTeam = (AppCompatSpinner)recipeView.findViewById(R.id.spinner_unit);
                     EditText edQtd = (EditText)recipeView.findViewById(R.id.edit_recipe_qtd);
 
-                    ingredients.get(i).getUnitType();
-
-                    spinnerTeam.setSelection(3);
+                    spinnerTeam.setSelection(spinner[i]);
                     editTextName.setText(ingredients.get(i).getIngredient());
                     edQtd.setText(ingredients.get(i).getQuantity());
 
@@ -133,6 +154,7 @@ public class NewRecipeActivity extends AppCompatActivity implements View.OnClick
 
 
         btnSaveRecipe.setOnClickListener(view -> {
+
             if (imageView.getDrawable() == null) {
                 Toast.makeText(this,"Select an image before saving!",Toast.LENGTH_SHORT).show();
             } else if (edName.getText().toString().trim().equals("")) {
@@ -142,13 +164,14 @@ public class NewRecipeActivity extends AppCompatActivity implements View.OnClick
             } else if (edHow.getText().toString().trim().equals("")) {
                 Toast.makeText(this,"Empty how to. Empty field is not allowed!",Toast.LENGTH_SHORT).show();
             } else {
+
                 uploadImg();
 
-                try {
-                    Thread.sleep(2000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+//                try {
+//                    Thread.sleep(5000);
+//                } catch (InterruptedException e) {
+//                    e.printStackTrace();
+//                }
 
                 startActivity(new Intent(getApplicationContext(), RecipeActivity.class));
                 finish();
@@ -159,6 +182,16 @@ public class NewRecipeActivity extends AppCompatActivity implements View.OnClick
     @Override
     public void onClick(View v) {
       addView();
+    }
+
+    public boolean tipoSpinner(int pos, String tipo){
+        boolean result = false;
+
+        if(ingredients.get(pos).getUnitType().equals(tipo)){
+            result = true;
+        };
+
+        return result;
     }
 
     public void buildList() {
@@ -212,6 +245,7 @@ public class NewRecipeActivity extends AppCompatActivity implements View.OnClick
     }
 
     public void storeData(){
+        buildList();
 
         String img = imgUrl;
         String name = edName.getText().toString().trim();
@@ -226,43 +260,71 @@ public class NewRecipeActivity extends AppCompatActivity implements View.OnClick
         recipe.put("howto", howto);
         recipe.put("ingredients", ingredientList);
 
-        controller.fFirestore.collection("users").document(uId).collection("recipeBook")
-                .add(recipe)
-                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                    @Override
-                    public void onSuccess(DocumentReference documentReference) {
-                        Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull @NotNull Exception e) {
-                        Log.w(TAG, "Error adding document", e);
-                    }
-                });
+
+
+        if(activity != null) {
+            controller.fFirestore.collection("users").document(uId).collection("recipeBook").document(docId)
+                    .set(recipe).addOnCompleteListener(new OnCompleteListener<Void>() {
+                @Override
+                public void onComplete(@NonNull @NotNull Task<Void> task) {
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull @NotNull Exception e) {
+                    Toast.makeText(NewRecipeActivity.this, "edit erro: "+e.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            });
+        }else{
+            controller.fFirestore.collection("users").document(uId).collection("recipeBook")
+                    .add(recipe)
+                    .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                        @Override
+                        public void onSuccess(DocumentReference documentReference) {
+                            Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull @NotNull Exception e) {
+                    Log.w(TAG, "Error adding document", e);
+                }
+            });
+        }
+
     }
 
     public void getDownloadLink() {
         buildList();
 
-        storageReference.child("images/"+imgUri.getLastPathSegment()).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-            @Override
-            public void onSuccess(Uri uri) {
-                imgUrl = uri.toString();
-                storeData();
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull @NotNull Exception e) {
-                Toast.makeText(NewRecipeActivity.this, "Deu erro", Toast.LENGTH_SHORT).show();
-            }
-        });
+        if (imgUri != null) {
+            storageReference.child("images/"+imgUri.getLastPathSegment()).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                @Override
+                public void onSuccess(Uri uri) {
+                    imgUrl = uri.toString();
+                    storeData();
+                }
+            });
+        }else{
+            storeData();
+        }
+
     }
 
     public void uploadImg(){
-        uploadTask = storageReference.child("images/"+imgUri.getLastPathSegment()).putFile(imgUri);
-        uploadTask.addOnSuccessListener(taskSnapshot -> getDownloadLink() //Toast.makeText(this, "rá", Toast.LENGTH_SHORT).show()
-        ).addOnFailureListener(e -> Toast.makeText(NewRecipeActivity.this, "deu ruim", Toast.LENGTH_SHORT).show());
+        if(imgUri != null){
+            uploadTask = storageReference.child("images/"+imgUri.getLastPathSegment()).putFile(imgUri);
+            uploadTask.addOnSuccessListener(taskSnapshot -> {
+                        getDownloadLink();
+                    }
+            ).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull @NotNull Exception taskSnapshot) {
+                    storeData();
+                    Toast.makeText(NewRecipeActivity.this, "img already exists", Toast.LENGTH_SHORT).show();
+                }
+            });
+        }else{
 
+        }
     }
 
     public void pickImg(View view){

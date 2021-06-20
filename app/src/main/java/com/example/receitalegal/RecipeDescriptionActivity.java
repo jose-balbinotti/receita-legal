@@ -87,13 +87,13 @@ public class RecipeDescriptionActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-
                 Intent intent = new Intent(getApplicationContext(), NewRecipeActivity.class);
                 intent.putExtra("activity","edit");
                 intent.putExtra("username", username);
                 intent.putExtra("img", imgurl);
                 intent.putExtra("description", description);
                 intent.putExtra("howto", howto);
+                intent.putExtra("docid", docId);
 
                 for (int i = 0; i < ingredients.size() ; i++) {
                     ingredientArrayList.add(ingredients.get(i));
