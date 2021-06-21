@@ -10,7 +10,11 @@ import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.text.Html;
 import android.text.Layout;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -37,6 +41,7 @@ import com.google.firebase.storage.StorageReference;
 import com.squareup.picasso.Picasso;
 
 import org.jetbrains.annotations.NotNull;
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -173,6 +178,7 @@ public class RecipeDescriptionActivity extends AppCompatActivity {
                             recipeView.findViewById(R.id.spinner_unit).setVisibility(View.GONE);
                             recipeView.findViewById(R.id.image_remove).setVisibility(View.GONE);
                             recipeView.findViewById(R.id.edit_recipe_qtd).setVisibility(View.GONE);
+                            recipeView.findViewById(R.id.edit_pantry).setVisibility(View.GONE);
 
                             EditText editText = (EditText)recipeView.findViewById(R.id.edit_recipe_name);
 
@@ -191,6 +197,10 @@ public class RecipeDescriptionActivity extends AppCompatActivity {
                         step++;
                         layout.addView(tv);
 
+                        int n = productsList.size();
+
+
+
                         for (int i = 0; i < ingredients.size(); i++) {
                             final View recipeView = getLayoutInflater().inflate(R.layout.row_add_recipe,null,false);
                             recipeView.findViewById(R.id.spinner_unit).setVisibility(View.GONE);
@@ -198,10 +208,57 @@ public class RecipeDescriptionActivity extends AppCompatActivity {
 
                             EditText editText = (EditText)recipeView.findViewById(R.id.edit_recipe_name);
                             EditText editQtd = (EditText)recipeView.findViewById(R.id.edit_recipe_qtd);
-                            ImageView imageClose = (ImageView)recipeView.findViewById(R.id.image_remove);
+                            EditText editPantry = (EditText)recipeView.findViewById(R.id.edit_pantry);
 
                             editText.setEnabled(false);
                             editQtd.setEnabled(false);
+                            editPantry.setEnabled(false);
+
+                            if(n > 0) {
+                                for (int j = 0; j < n ; j++) {
+                                    Boolean found = false;
+                                    if(ingredients.get(i).getIngredient().equals(productsList.get(j).getIngredient())){
+                                    editText.setText(ingredients.get(i).getIngredient());
+                                    editPantry.setTextColor(Color.parseColor("#ff0000"));
+                                    editPantry.setText(productsList.get(j).getQuantity() + " " + productsList.get(j).getUnitType());
+                                    editQtd.setTextColor(Color.parseColor("#59981A"));
+                                    editQtd.setText(ingredients.get(i).getQuantity() + " " + ingredients.get(i).getUnitType());
+                                    found = true;
+                                }else{
+                                   editText.setText(ingredients.get(i).getIngredient());
+                                   editQtd.setText(ingredients.get(i).getQuantity() + " " + ingredients.get(i).getUnitType());
+                                }
+                            }
+
+                            }else{
+                                editText.setText(ingredients.get(i).getIngredient());
+                                editQtd.setText(ingredients.get(i).getQuantity());
+                            }
+
+
+
+//                            for (int j = 0; j < n; j++) {
+//                                Boolean found = false;
+//                                if(ingredients.get(i).getIngredient().equals(productsList.get(j).getIngredient())){
+//                                    Log.e(TAG,""+ingredients.get(i).getIngredient());
+////                                    editText.setTextColor(Color.parseColor("#fc1c03"));
+//                                    editText.setText(ingredients.get(i).getIngredient());
+//                                    editPantry.setTextColor(Color.parseColor("#ff0000"));
+//                                    editPantry.setText(productsList.get(j).getQuantity());
+//                                    editQtd.setText(ingredients.get(i).getQuantity());
+//                                    found = true;
+//                                }else{
+////                                    editPantry.setText("0");
+//
+//                                }
+//
+//                                if (found){
+//                                    break;
+//                                }
+//                            }
+
+
+
 
 
 //                            productsList;
@@ -219,6 +276,10 @@ public class RecipeDescriptionActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    public String getEmojiByUnicode(int unicode){
+        return new String(Character.toChars(unicode));
     }
 
 

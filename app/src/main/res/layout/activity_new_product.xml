@@ -39,11 +39,14 @@
             android:textColor="@android:color/secondary_text_light"
             android:textSize="15sp"></TextView>
 
+
         <LinearLayout
             android:id="@+id/layout_list"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"></LinearLayout>
+            android:orientation="vertical">
+
+        </LinearLayout>
 
         <Button
             android:id="@+id/button_add"

@@ -228,6 +228,7 @@ public class NewRecipeActivity extends AppCompatActivity implements View.OnClick
         EditText editText = (EditText)recipeView.findViewById(R.id.edit_recipe_name);
         AppCompatSpinner spinnerTeam = (AppCompatSpinner)recipeView.findViewById(R.id.spinner_unit);
         ImageView imageClose = (ImageView)recipeView.findViewById(R.id.image_remove);
+        recipeView.findViewById(R.id.edit_pantry).setVisibility(View.GONE);
 
         ArrayAdapter arrayAdapter = new ArrayAdapter(this,android.R.layout.simple_spinner_item, unitType);
         spinnerTeam.setAdapter(arrayAdapter);

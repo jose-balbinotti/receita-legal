@@ -30,19 +30,6 @@
             tools:ignore="Suspicious0dp"
             tools:srcCompat="@drawable/addimg_03" />
 
-        <!--        <Button-->
-        <!--            android:id="@+id/btnPickImg"-->
-        <!--            android:layout_width="match_parent"-->
-        <!--            android:layout_height="wrap_content"-->
-        <!--            android:layout_marginStart="25dp"-->
-        <!--            android:layout_marginTop="3dp"-->
-        <!--            android:layout_marginEnd="25dp"-->
-        <!--            android:onClick="pickImg"-->
-        <!--            android:text="Pick image"-->
-        <!--            app:layout_constraintEnd_toEndOf="parent"-->
-        <!--            app:layout_constraintStart_toStartOf="parent"-->
-        <!--            app:layout_constraintTop_toBottomOf="@+id/imageViewRecipe" />-->
-
         <TextView
             android:id="@+id/textViewNewRecipe"
             android:layout_width="match_parent"
@@ -123,6 +110,8 @@
             android:text="Ingredient List"
             android:textColor="@android:color/secondary_text_light"
             android:textSize="15sp"></TextView>
+
+
 
         <LinearLayout
             android:id="@+id/layout_list"
