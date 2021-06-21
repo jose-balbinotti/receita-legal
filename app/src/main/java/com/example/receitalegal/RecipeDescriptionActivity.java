@@ -2,9 +2,12 @@ package com.example.receitalegal;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatSpinner;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.media.Image;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.text.Layout;
@@ -25,15 +28,18 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 import com.squareup.picasso.Picasso;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.StringTokenizer;
 
@@ -45,12 +51,18 @@ public class RecipeDescriptionActivity extends AppCompatActivity {
     Controller controller = Controller.getInstance();
     String uId = controller.getUid();
     String docId;
+    Uri uriToDelete;
 
     FirebaseFirestore rootRef = controller.fFirestore;
     CollectionReference userRef = rootRef.collection("recipeBook");
     DocumentReference userIdRef = userRef.document(uId);
     List<Ingredient> ingredients = new ArrayList<>();
+    List<Ingredient> productsList = new ArrayList<>();
     ArrayList<Ingredient> ingredientArrayList = new ArrayList<>();
+    ArrayList<String> listOne = new ArrayList<>();
+    ArrayList<String> listTwo = new ArrayList<>();
+    StorageReference storageReference;
+
     private final String TAG = null;
 
     LinearLayout layout;
@@ -72,12 +84,16 @@ public class RecipeDescriptionActivity extends AppCompatActivity {
         ImageButton btnDeleteRecipe = findViewById(R.id.btnDeleteRecipe);
         ImageButton btnEditRecipe = findViewById(R.id.btnEditRecipe);
 
+        storageReference = FirebaseStorage.getInstance().getReference();
+
         Bundle extras = getIntent().getExtras();
         if(extras != null){
             username = extras.getString("username");
             imgurl = extras.getString("img");
             description = extras.getString("description");
         }
+
+        getPantry();
 
         Picasso.with(RecipeDescriptionActivity.this).load(imgurl).into(img);
         nameTxt.setText(username);
@@ -108,9 +124,6 @@ public class RecipeDescriptionActivity extends AppCompatActivity {
         btnDeleteRecipe.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-
-
                 controller.fFirestore
                 .collection("users")
                 .document(uId).collection("recipeBook")
@@ -120,10 +133,13 @@ public class RecipeDescriptionActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull @NotNull Task<Void> task) {
                         Log.d(TAG,"DocumentSnapshot sucessfully deleted!");
-                        startActivity(new Intent(getApplicationContext(), RecipeActivity.class));
-
-
-
+                        uriToDelete = Uri.parse(imgurl);
+                        storageReference.child(uriToDelete.getLastPathSegment()).delete().addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull @NotNull Task<Void> task) {
+                                startActivity(new Intent(getApplicationContext(), RecipeActivity.class));
+                            }
+                        });
                     }
                 }).addOnFailureListener(new OnFailureListener() {
                     @Override
@@ -187,14 +203,34 @@ public class RecipeDescriptionActivity extends AppCompatActivity {
                             editText.setEnabled(false);
                             editQtd.setEnabled(false);
 
-                            editText.setText(ingredients.get(i).getIngredient());
-                            editQtd.setText(ingredients.get(i).getQuantity() + " " + ingredients.get(i).getUnitType());
+
+//                            productsList;
+//                            ingredients;
+//
+
+
+
 
                             layout.addView(recipeView);
                         }
                     }
                 }else {
                     Log.d(TAG, "Error getting documents: ", task.getException());
+                }
+            }
+        });
+    }
+
+
+    public void getPantry(){
+        controller.fFirestore.collection("users")
+                .document(uId).collection("pantry")
+                .document(uId)
+                .get().addOnCompleteListener(task -> {
+            if(task.isSuccessful()){
+                DocumentSnapshot document = task.getResult();
+                if(document.exists()){
+                    productsList = document.toObject(IngredientsDocument.class).ingredients;
                 }
             }
         });
