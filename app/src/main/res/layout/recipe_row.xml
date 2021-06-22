@@ -11,7 +11,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="248dp"
-        android:background="@drawable/grey_bg"
+        android:background="@drawable/round_grey"
         android:orientation="vertical">
 
         <ImageView
