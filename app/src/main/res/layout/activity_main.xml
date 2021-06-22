@@ -8,51 +8,51 @@
 
 
     <LinearLayout
-        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
         <RelativeLayout
-            android:layout_marginTop="32dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
+            android:layout_marginTop="32dp"
             android:layout_marginRight="20dp">
 
             <TextView
                 android:id="@+id/txtNameUser"
-                android:text="@string/userdash"
-                android:textSize="24sp"
-                android:textColor="#000"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
-            </TextView>
+                android:layout_height="wrap_content"
+                android:text="@string/userdash"
+                android:textColor="#000"
+                android:textSize="24sp"></TextView>
 
             <TextView
                 android:id="@+id/txtNumRecipes"
-                android:layout_marginTop="6dp"
-                android:layout_below="@+id/txtNameUser"
-                android:text="@string/userrecipes"
-                android:textSize="14sp"
-                android:textColor="#000"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
-            </TextView>
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/txtNameUser"
+                android:layout_marginTop="6dp"
+                android:text="@string/userrecipes"
+                android:textColor="#000"
+                android:textSize="14sp"></TextView>
 
             <ImageView
                 android:id="@+id/profile"
-                android:layout_width="82dp"
-                android:layout_height="82dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
-                android:src="@drawable/splash_bg" />
+                android:layout_alignParentBottom="false"
+                app:srcCompat="@drawable/profile_bg" />
 
             <TextView
                 android:id="@+id/btnLogout"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:layout_below="@+id/profile"
+                android:layout_alignStart="@+id/profile"
                 android:layout_alignParentEnd="true"
-                android:layout_marginTop="6dp"
+                android:gravity="center"
                 android:onClick="logout"
                 android:text="@string/logout"
                 android:textColor="#000"
@@ -63,12 +63,12 @@
         </RelativeLayout>
 
         <GridLayout
-            android:columnCount="2"
-            android:rowCount="3"
-            android:alignmentMode="alignMargins"
-            android:columnOrderPreserved="false"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:alignmentMode="alignMargins"
+            android:columnCount="2"
+            android:columnOrderPreserved="false"
+            android:rowCount="3">
 
             <androidx.cardview.widget.CardView
                 android:layout_width="wrap_content"
@@ -109,15 +109,16 @@
                 </LinearLayout>
 
             </androidx.cardview.widget.CardView>
+
             <androidx.cardview.widget.CardView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_columnWeight="1"
                 android:layout_rowWeight="1"
+                android:layout_columnWeight="1"
+                android:layout_margin="12dp"
                 android:elevation="6dp"
-                app:cardElevation="6dp"
                 app:cardCornerRadius="12dp"
-                android:layout_margin="12dp">
+                app:cardElevation="6dp">
 
                 <LinearLayout
                     android:id="@+id/btnPantry"
@@ -146,8 +147,6 @@
                 </LinearLayout>
 
             </androidx.cardview.widget.CardView>
-
-
 
 
         </GridLayout>

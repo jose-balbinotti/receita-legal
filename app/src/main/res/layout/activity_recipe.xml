@@ -14,38 +14,38 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
-            android:layout_marginTop="32dp"
-            android:layout_marginRight="20dp"
-            android:paddingBottom="10dp">
+            android:layout_height="149dp"
+            android:background="@drawable/grey_bg"
+            android:paddingLeft="25dp"
+            android:paddingTop="25dp"
+            android:paddingRight="25dp"
+            android:paddingBottom="25dp">
 
             <TextView
                 android:id="@+id/txtNameUser"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/userdash"
-                android:textColor="#000"
-                android:textSize="24sp"></TextView>
+                android:textColor="#F44336"
+                android:textSize="34sp"></TextView>
 
             <TextView
                 android:id="@+id/txtNumRecipes"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/txtNameUser"
-                android:layout_marginTop="13dp"
+                android:layout_marginTop="12dp"
                 android:text="@string/userrecipes"
-                android:textColor="#000"
+                android:textColor="#5A5A5A"
                 android:textSize="14sp"></TextView>
 
             <ImageView
                 android:id="@+id/profile"
-                android:layout_width="82dp"
-                android:layout_height="82dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
-                android:layout_marginEnd="-1dp"
-                android:background="@drawable/profile"
-                android:src="@drawable/splash_bg" />
+                android:layout_alignParentBottom="false"
+                app:srcCompat="@drawable/profile_bg" />
 
             <TextView
                 android:id="@+id/btnLogout"
@@ -57,7 +57,7 @@
                 android:gravity="center"
                 android:onClick="logout"
                 android:text="@string/logout"
-                android:textColor="#000"
+                android:textColor="#5A5A5A"
                 android:textSize="18sp">
 
             </TextView>
@@ -69,6 +69,7 @@
             android:layout_width="40dp"
             android:layout_height="35dp"
             android:layout_gravity="right"
+            android:layout_marginTop="15dp"
             android:layout_marginRight="15dp"
             android:background="@drawable/round_primary"
             android:onClick="newRecipe"
