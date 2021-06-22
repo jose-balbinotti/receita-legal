@@ -17,6 +17,7 @@ public class ProductActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_product);
 
+
         btnNewProduct = findViewById(R.id.btnNewProduct);
 
         btnNewProduct.setOnClickListener(new View.OnClickListener() {
@@ -27,4 +28,18 @@ public class ProductActivity extends AppCompatActivity {
         });
 
     }
+
+    @Override
+    public void onBackPressed(){
+        startActivity(new Intent(this, MainActivity.class));
+        finishAffinity();
+        return;
+    }
+
+//    public void logout(View view){
+//        controller.fAuth.signOut();
+//        startActivity(new Intent(getApplicationContext(), LoginActivity.class));
+//        controller = null;
+//        finish();
+//    }
 }

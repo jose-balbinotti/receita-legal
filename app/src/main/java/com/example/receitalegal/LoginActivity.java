@@ -31,6 +31,7 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        controller.fAuth.signOut();
 
         lEmail = findViewById(R.id.editTextEmailAddress);
         lPassword = findViewById(R.id.editTextPassword);

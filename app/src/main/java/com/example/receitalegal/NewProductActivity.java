@@ -50,7 +50,6 @@ public class NewProductActivity extends AppCompatActivity implements View.OnClic
 //    List<Ingredient> ingredients = new ArrayList<>();
     LinearLayout layout;
 
-
     String uId;
     StorageReference storageReference;
     DocumentReference doc;
@@ -236,4 +235,12 @@ public class NewProductActivity extends AppCompatActivity implements View.OnClic
 
     @Override
     public void onClick(View view) { addView();}
+
+    @Override
+    public void onBackPressed(){
+        startActivity(new Intent(this, ProductActivity.class));
+        finishAffinity();
+        return;
+    }
+
 }
