@@ -154,128 +154,6 @@ public class RecipeDescriptionActivity extends AppCompatActivity {
                 });
             }
         });
-
-        controller.fFirestore.collection("users").document(uId).collection("recipeBook").whereEqualTo("img",imgurl)
-        .get()
-        .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull @NotNull Task<QuerySnapshot> task) {
-                if(task.isSuccessful()){
-                    for(QueryDocumentSnapshot document : task.getResult()){
-                        Log.d(TAG, document.getId() + " => " + document.getData());
-
-                        docId = document.getId();
-
-                        ingredients = document.toObject(IngredientsDocument.class).ingredients;
-                        howto = document.getString("howto");
-
-                        int step= 1;
-
-                        String[] result = howto.split(",");
-
-                        for (int i = 0; i <result.length ; i++) {
-                            final View recipeView = getLayoutInflater().inflate(R.layout.row_add_recipe,null,false);
-                            recipeView.findViewById(R.id.spinner_unit).setVisibility(View.GONE);
-                            recipeView.findViewById(R.id.image_remove).setVisibility(View.GONE);
-                            recipeView.findViewById(R.id.edit_recipe_qtd).setVisibility(View.GONE);
-                            recipeView.findViewById(R.id.edit_pantry).setVisibility(View.GONE);
-
-                            EditText editText = (EditText)recipeView.findViewById(R.id.edit_recipe_name);
-
-                            editText.setEnabled(false);
-                            editText.setText("Step: " + step + " - " + result[i]);
-                            step++;
-
-                            layout.addView(recipeView);
-//
-                        }
-                        step = 0;
-
-                        TextView tv = new TextView(RecipeDescriptionActivity.this);
-                        tv.setText("Ingredient List");
-                        tv.setGravity(Gravity.CENTER);
-                        step++;
-                        layout.addView(tv);
-
-                        int n = productsList.size();
-
-
-
-                        for (int i = 0; i < ingredients.size(); i++) {
-                            final View recipeView = getLayoutInflater().inflate(R.layout.row_add_recipe,null,false);
-                            recipeView.findViewById(R.id.spinner_unit).setVisibility(View.GONE);
-                            recipeView.findViewById(R.id.image_remove).setVisibility(View.GONE);
-
-                            EditText editText = (EditText)recipeView.findViewById(R.id.edit_recipe_name);
-                            EditText editQtd = (EditText)recipeView.findViewById(R.id.edit_recipe_qtd);
-                            EditText editPantry = (EditText)recipeView.findViewById(R.id.edit_pantry);
-
-                            editText.setEnabled(false);
-                            editQtd.setEnabled(false);
-                            editPantry.setEnabled(false);
-
-                            if(n > 0) {
-                                for (int j = 0; j < n ; j++) {
-                                    Boolean found = false;
-                                    if(ingredients.get(i).getIngredient().equals(productsList.get(j).getIngredient())){
-                                    editText.setText(ingredients.get(i).getIngredient());
-                                    editPantry.setTextColor(Color.parseColor("#ff0000"));
-                                    editPantry.setText(productsList.get(j).getQuantity() + " " + productsList.get(j).getUnitType());
-                                    editQtd.setTextColor(Color.parseColor("#59981A"));
-                                    editQtd.setText(ingredients.get(i).getQuantity() + " " + ingredients.get(i).getUnitType());
-                                    found = true;
-                                }else{
-                                   editText.setText(ingredients.get(i).getIngredient());
-                                   editQtd.setText(ingredients.get(i).getQuantity() + " " + ingredients.get(i).getUnitType());
-                                }
-                            }
-
-                            }else{
-                                editText.setText(ingredients.get(i).getIngredient());
-                                editQtd.setText(ingredients.get(i).getQuantity());
-                            }
-
-
-
-//                            for (int j = 0; j < n; j++) {
-//                                Boolean found = false;
-//                                if(ingredients.get(i).getIngredient().equals(productsList.get(j).getIngredient())){
-//                                    Log.e(TAG,""+ingredients.get(i).getIngredient());
-////                                    editText.setTextColor(Color.parseColor("#fc1c03"));
-//                                    editText.setText(ingredients.get(i).getIngredient());
-//                                    editPantry.setTextColor(Color.parseColor("#ff0000"));
-//                                    editPantry.setText(productsList.get(j).getQuantity());
-//                                    editQtd.setText(ingredients.get(i).getQuantity());
-//                                    found = true;
-//                                }else{
-////                                    editPantry.setText("0");
-//
-//                                }
-//
-//                                if (found){
-//                                    break;
-//                                }
-//                            }
-
-
-
-
-
-//                            productsList;
-//                            ingredients;
-//
-
-
-
-
-                            layout.addView(recipeView);
-                        }
-                    }
-                }else {
-                    Log.d(TAG, "Error getting documents: ", task.getException());
-                }
-            }
-        });
     }
 
     public String getEmojiByUnicode(int unicode){
@@ -292,8 +170,98 @@ public class RecipeDescriptionActivity extends AppCompatActivity {
                 DocumentSnapshot document = task.getResult();
                 if(document.exists()){
                     productsList = document.toObject(IngredientsDocument.class).ingredients;
+
+
+                    controller.fFirestore.collection("users").document(uId).collection("recipeBook").whereEqualTo("img",imgurl)
+                            .get()
+                            .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                @Override
+                                public void onComplete(@NonNull @NotNull Task<QuerySnapshot> task) {
+                                    if(task.isSuccessful()){
+                                        for(QueryDocumentSnapshot document : task.getResult()){
+                                            Log.d(TAG, document.getId() + " => " + document.getData());
+
+                                            docId = document.getId();
+
+                                            ingredients = document.toObject(IngredientsDocument.class).ingredients;
+                                            howto = document.getString("howto");
+
+                                            int step= 1;
+
+                                            String[] result = howto.split(",");
+
+                                            for (int i = 0; i <result.length ; i++) {
+                                                final View recipeView = getLayoutInflater().inflate(R.layout.row_add_recipe,null,false);
+                                                recipeView.findViewById(R.id.spinner_unit).setVisibility(View.GONE);
+                                                recipeView.findViewById(R.id.image_remove).setVisibility(View.GONE);
+                                                recipeView.findViewById(R.id.edit_recipe_qtd).setVisibility(View.GONE);
+                                                recipeView.findViewById(R.id.edit_pantry).setVisibility(View.GONE);
+
+                                                EditText editText = (EditText)recipeView.findViewById(R.id.edit_recipe_name);
+
+                                                editText.setEnabled(false);
+                                                editText.setText("Step: " + step + " - " + result[i]);
+                                                step++;
+
+                                                layout.addView(recipeView);
+//
+                                            }
+                                            step = 0;
+
+                                            TextView tv = new TextView(RecipeDescriptionActivity.this);
+                                            tv.setText("Ingredient List");
+                                            tv.setGravity(Gravity.CENTER);
+                                            step++;
+                                            layout.addView(tv);
+
+                                            int n = productsList.size();
+
+
+
+                                            for (int i = 0; i < ingredients.size(); i++) {
+                                                final View recipeView = getLayoutInflater().inflate(R.layout.row_add_recipe,null,false);
+                                                recipeView.findViewById(R.id.spinner_unit).setVisibility(View.GONE);
+                                                recipeView.findViewById(R.id.image_remove).setVisibility(View.GONE);
+
+                                                EditText editText = (EditText)recipeView.findViewById(R.id.edit_recipe_name);
+                                                EditText editQtd = (EditText)recipeView.findViewById(R.id.edit_recipe_qtd);
+                                                EditText editPantry = (EditText)recipeView.findViewById(R.id.edit_pantry);
+
+                                                editText.setEnabled(false);
+                                                editQtd.setEnabled(false);
+                                                editPantry.setEnabled(false);
+
+                                                if(n > 0) {
+                                                    for (int j = 0; j < n ; j++) {
+                                                        Boolean found = false;
+                                                        if(ingredients.get(i).getIngredient().equals(productsList.get(j).getIngredient())){
+                                                            editText.setText(ingredients.get(i).getIngredient());
+                                                            editPantry.setTextColor(Color.parseColor("#ff0000"));
+                                                            editPantry.setText(productsList.get(j).getQuantity() + " " + productsList.get(j).getUnitType());
+                                                            editQtd.setTextColor(Color.parseColor("#59981A"));
+                                                            editQtd.setText(ingredients.get(i).getQuantity() + " " + ingredients.get(i).getUnitType());
+                                                            found = true;
+                                                        }else{
+                                                            editText.setText(ingredients.get(i).getIngredient());
+                                                            editQtd.setText(ingredients.get(i).getQuantity() + " " + ingredients.get(i).getUnitType());
+                                                        }
+                                                    }
+
+                                                }else{
+                                                    editText.setText(ingredients.get(i).getIngredient());
+                                                    editQtd.setText(ingredients.get(i).getQuantity());
+                                                }
+
+                                                layout.addView(recipeView);
+                                            }
+                                        }
+                                    }else {
+                                        Log.d(TAG, "Error getting documents: ", task.getException());
+                                    }
+                                }
+                            });
+                    }
                 }
-            }
         });
     }
 }

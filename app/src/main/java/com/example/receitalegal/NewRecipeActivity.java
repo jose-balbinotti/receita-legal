@@ -10,6 +10,7 @@ import androidx.core.content.ContextCompat;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -228,7 +229,11 @@ public class NewRecipeActivity extends AppCompatActivity implements View.OnClick
         EditText editText = (EditText)recipeView.findViewById(R.id.edit_recipe_name);
         AppCompatSpinner spinnerTeam = (AppCompatSpinner)recipeView.findViewById(R.id.spinner_unit);
         ImageView imageClose = (ImageView)recipeView.findViewById(R.id.image_remove);
+        EditText editAmount = (EditText)recipeView.findViewById(R.id.edit_recipe_qtd);
         recipeView.findViewById(R.id.edit_pantry).setVisibility(View.GONE);
+
+
+        editAmount.setTextColor(Color.parseColor("#000000"));
 
         ArrayAdapter arrayAdapter = new ArrayAdapter(this,android.R.layout.simple_spinner_item, unitType);
         spinnerTeam.setAdapter(arrayAdapter);
