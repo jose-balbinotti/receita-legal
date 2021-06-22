@@ -138,9 +138,9 @@ public class NewProductActivity extends AppCompatActivity implements View.OnClic
 
                         EditText editText = (EditText)recipeView.findViewById(R.id.edit_recipe_name);
                         EditText editQtd = (EditText)recipeView.findViewById(R.id.edit_recipe_qtd);
-                        AppCompatSpinner spinnerTeam = (AppCompatSpinner)recipeView.findViewById(R.id.spinner_unit);
+                        AppCompatSpinner spinnerUnit = (AppCompatSpinner)recipeView.findViewById(R.id.spinner_unit);
 
-                        spinnerTeam.setSelection(spinner[i]);
+                        spinnerUnit.setSelection(spinner[i]);
                         editText.setText(productsList.get(i).getIngredient());
                         editQtd.setText(productsList.get(i).getQuantity());
                     }
