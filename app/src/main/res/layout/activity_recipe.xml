@@ -16,6 +16,7 @@
             android:layout_width="match_parent"
             android:layout_height="149dp"
             android:background="@drawable/round_grey"
+            android:elevation="@dimen/browser_actions_context_menu_max_width"
             android:paddingLeft="25dp"
             android:paddingTop="25dp"
             android:paddingRight="25dp"
@@ -26,7 +27,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/userdash"
-                android:textColor="#F44336"
+                android:textColor="#5A5A5A"
                 android:textSize="34sp"></TextView>
 
             <TextView
@@ -36,7 +37,7 @@
                 android:layout_below="@+id/txtNameUser"
                 android:layout_marginTop="12dp"
                 android:text="@string/userrecipes"
-                android:textColor="#F44336"
+                android:textColor="#5A5A5A"
                 android:textSize="14sp"></TextView>
 
             <ImageView
@@ -57,7 +58,7 @@
                 android:gravity="center"
                 android:onClick="logout"
                 android:text="@string/logout"
-                android:textColor="#F44336"
+                android:textColor="#5A5A5A"
                 android:textSize="18sp">
 
             </TextView>
