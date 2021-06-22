@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
-    app:cardCornerRadius="12dp"
     android:layout_margin="7dp"
-    android:elevation="90dp">
+    android:background="@drawable/round_grey"
+    android:elevation="90dp"
+    android:orientation="vertical"
+    app:cardCornerRadius="12dp">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -29,7 +30,7 @@
             android:paddingLeft="10dp"
             android:text="post title"
             android:textColor="#5A5A5A"
-            android:textSize="34dp"></TextView>
+            android:textSize="30sp"></TextView>
 
         <TextView
             android:id="@+id/post_description"

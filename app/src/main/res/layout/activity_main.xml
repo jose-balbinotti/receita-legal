@@ -14,27 +14,29 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
-            android:layout_marginTop="32dp"
-            android:layout_marginRight="20dp">
+            android:layout_height="149dp"
+            android:background="@drawable/round_grey"
+            android:paddingLeft="25dp"
+            android:paddingTop="25dp"
+            android:paddingRight="25dp"
+            android:paddingBottom="25dp">
 
             <TextView
                 android:id="@+id/txtNameUser"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/userdash"
-                android:textColor="#000"
-                android:textSize="24sp"></TextView>
+                android:textColor="#5A5A5A"
+                android:textSize="34sp"></TextView>
 
             <TextView
                 android:id="@+id/txtNumRecipes"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/txtNameUser"
-                android:layout_marginTop="6dp"
+                android:layout_marginTop="12dp"
                 android:text="@string/userrecipes"
-                android:textColor="#000"
+                android:textColor="#5A5A5A"
                 android:textSize="14sp"></TextView>
 
             <ImageView
@@ -47,16 +49,16 @@
 
             <TextView
                 android:id="@+id/btnLogout"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_below="@+id/profile"
                 android:layout_alignStart="@+id/profile"
                 android:layout_alignParentEnd="true"
                 android:gravity="center"
                 android:onClick="logout"
                 android:text="@string/logout"
-                android:textColor="#000"
-                android:textSize="14sp">
+                android:textColor="#5A5A5A"
+                android:textSize="18sp">
 
             </TextView>
 
