@@ -80,14 +80,14 @@ public class Controller {
                     setName(name);
                     setEmail(email);
                     setUid(uid);
-                    countRecipes();
+                    countRecipes(null);
                     activity.startActivity(new Intent(activity.getApplicationContext(), MainActivity.class));
                 }
             }
         });
     }
 
-    public void countRecipes() {
+    public void countRecipes(Activity activity) {
         fFirestore.collection("users").document(this.uid).collection("recipeBook")
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override
@@ -101,8 +101,13 @@ public class Controller {
                         for(DocumentChange dc : value.getDocumentChanges()){
                             if(dc.getType() == DocumentChange.Type.ADDED){
                                 count++;
-                                Log.e("asdasd", "asdjkhaskjdasdjkhaiksdjhajksdkahjsdasjkdhajkd " + count.toString());
-                                setNumRecipes(count);
+                            }
+                        }
+
+                        if (count > 0) {
+                            setNumRecipes(count);
+                            if (activity != null) {
+                                activity.startActivity(new Intent(activity.getApplicationContext(), RecipeActivity.class));
                             }
                         }
                     }
