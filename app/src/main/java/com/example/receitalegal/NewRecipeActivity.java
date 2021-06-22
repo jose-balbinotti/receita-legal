@@ -275,9 +275,8 @@ public class NewRecipeActivity extends AppCompatActivity implements View.OnClick
                     .addOnCompleteListener(new OnCompleteListener<Void>() {
                 @Override
                 public void onComplete(@NonNull @NotNull Task<Void> task) {
-//                    controller.countRecipes(NewRecipeActivity.this);
-                    controller.countRecipes();
-                    startActivity(new Intent(getApplicationContext(), RecipeActivity.class));
+                    controller.countRecipes(NewRecipeActivity.this);
+//                    startActivity(new Intent(getApplicationContext(), RecipeActivity.class));
                     finish();
                 }
             }).addOnFailureListener(new OnFailureListener() {
@@ -292,9 +291,8 @@ public class NewRecipeActivity extends AppCompatActivity implements View.OnClick
                     .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                         @Override
                         public void onSuccess(DocumentReference documentReference) {
-//                            controller.countRecipes(NewRecipeActivity.this);
-                            controller.countRecipes();
-                            startActivity(new Intent(getApplicationContext(), RecipeActivity.class));
+                            controller.countRecipes(NewRecipeActivity.this);
+//                            startActivity(new Intent(getApplicationContext(), RecipeActivity.class));
                             finish();
                             Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
                         }
