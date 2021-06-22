@@ -122,4 +122,11 @@ public class Controller {
         return this.numRecipes;
     }
 
+    public void logout() {
+        this.name = "";
+        this.email = "";
+        this.uid = "";
+        this.numRecipes = 0;
+    }
+
 }

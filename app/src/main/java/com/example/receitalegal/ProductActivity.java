@@ -7,16 +7,25 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.TextView;
 
 public class ProductActivity extends AppCompatActivity {
 
+    TextView txtNameUser;
+    TextView txtNumRecipes;
     ImageButton btnNewProduct;
+    Controller controller = Controller.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_product);
 
+        txtNameUser = findViewById(R.id.txtNameUser);
+        txtNameUser.setText(controller.getName());
+
+        txtNumRecipes = findViewById(R.id.txtNumRecipes);
+        txtNumRecipes.setText(controller.getNumRecipes().toString() + " recipes");
 
         btnNewProduct = findViewById(R.id.btnNewProduct);
 
@@ -36,10 +45,11 @@ public class ProductActivity extends AppCompatActivity {
         return;
     }
 
-//    public void logout(View view){
-//        controller.fAuth.signOut();
-//        startActivity(new Intent(getApplicationContext(), LoginActivity.class));
-//        controller = null;
-//        finish();
-//    }
+    public void logout(View view){
+        controller.fAuth.signOut();
+        controller.logout();
+        controller = null;
+        startActivity(new Intent(getApplicationContext(), LoginActivity.class));
+        finish();
+    }
 }

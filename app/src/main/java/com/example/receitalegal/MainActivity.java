@@ -28,8 +28,9 @@ public class MainActivity extends AppCompatActivity {
 
     public void logout(View view){
         controller.fAuth.signOut();
-        startActivity(new Intent(getApplicationContext(), LoginActivity.class));
+        controller.logout();
         controller = null;
+        startActivity(new Intent(getApplicationContext(), LoginActivity.class));
         finish();
     }
 
