@@ -42,7 +42,8 @@ public class RegisterActivity extends AppCompatActivity {
         rBtnAlready = findViewById(R.id.btnAlready);
 
         if(controller.fAuth.getCurrentUser() != null){
-            startActivity(new Intent(getApplicationContext(), MainActivity.class));
+            controller.launchMain(RegisterActivity.this);
+//            startActivity(new Intent(getApplicationContext(), MainActivity.class));
             finish();
         }
 
@@ -87,7 +88,8 @@ public class RegisterActivity extends AppCompatActivity {
                                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
                             public void onSuccess(Void aVoid) {
-                                startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                                controller.launchMain(RegisterActivity.this);
+//                                startActivity(new Intent(getApplicationContext(), MainActivity.class));
                               Log.d(TAG,"onSucess: USER PROFILE IS CREATED FOR "+ uId);
                             }
                         });
