@@ -36,7 +36,7 @@
                 android:layout_below="@+id/txtNameUser"
                 android:layout_marginTop="12dp"
                 android:text="@string/userrecipes"
-                android:textColor="#5A5A5A"
+                android:textColor="#F44336"
                 android:textSize="14sp"></TextView>
 
             <ImageView
@@ -57,7 +57,7 @@
                 android:gravity="center"
                 android:onClick="logout"
                 android:text="@string/logout"
-                android:textColor="#5A5A5A"
+                android:textColor="#F44336"
                 android:textSize="18sp">
 
             </TextView>
